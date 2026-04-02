@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banca da Ciência</title>
+
+  <!-- Estilos base -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- React/Tailwind via CDN para simulador Jedi -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <button id="btnEachOfficial"></button>
+
+  <button id="btnSubprojetos" style="position: fixed; bottom: 0px; left: 0px; width: 260px; height: 260px; border: none; background: transparent; cursor: pointer;">
+    <img src="subprojetos.png" alt="Subprojetos" style="width: 100%; height: 100%;">
+  </button>
+
+  <div class="dialog-images">
+    <img src="dialogo1.png" alt="Diálogo 1" class="dialog-img dialog1">
+    <img src="dialogo2.png" alt="Diálogo 2" class="dialog-img dialog2">
+    <img src="dialogo3.png" alt="Diálogo 3" class="dialog-img dialog3">
+  </div>
+
+  <div class="modal-historico" id="modalHistorico">
+    <div class="historico-box">
+      <button id="btnCloseHistorico">&times;</button>
+      <div id="historicoContent">
+        <h2>Histórico</h2>
+        <p>O projeto Banca da Ciência da Escola de Artes, Ciências e Humanidades da Universidade de São Paulo (EACH-USP) surgiu em meados de 2010, de alguns professores universitários, como o docente Luís Paulo de Carvalho Piassi, inspirados por uma iniciativa de bibliotecas móveis que iam até as comunidades afastadas, a fim de incentivar a leitura entre os moradores. Ele tem o objetivo de apresentar conceitos científicos de uma forma lúdica para estudantes do Ensino Fundamental e para todos os interessados por ciências.</p>
+        
+        <h3>Temas abordados</h3>
+        <p>Experimentos de baixo custo, com explicações didáticas e propagação da ciência.</p>
+        
+        <h3>Público Alvo</h3>
+        <p>Todos os públicos, contudo principalmente e mais frequentemente voltado ao público infantojuvenil.</p>
+        
+        <h3>Apresentações</h3>
+        <p>São realizadas em escolas e na EACH-USP, a partir de solicitações.</p>
+        
+        <h3>Formas de entrar em contato</h3>
+        <p><strong>E-mail:</strong> <a href="#" id="linkEmail">bancadacienciausp@gmail.com</a></p>
+        <p><strong>Celular (Monitora Chelsee):</strong> +55 11 99602-2662</p>
+        <p><strong>Celular (Monitora Samara):</strong> +55 11 97107-2398</p>
+        <p><strong>Celular (Monitor Lukas):</strong> +55 11 96131-1112</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="top-buttons">
+    <button class="btn-kits" id="btnKits">
+      <img src="pasta.png" alt="Ícone Pasta" class="icon">
+    </button>
+
+    <button class="btn-aexestrela" id="btnAexestrela" data-url="https://rjfontana.github.io/aexestrela/">
+      <img src="aexestrela.png" alt="Ícone Aexestrela" class="icon">
+    </button>
+
+    <button class="btn-planos" id="btnPlanos" data-url="https://drive.google.com/open?id=1Fs-_Z4sTOSYsWpz6V6cw3NhHeOr98As4&usp=drive_copy">
+      <img src="planos.png" alt="Ícone Planos" class="icon">
+    </button>
+
+    <button class="btn-fazenda" id="btnFazenda" data-url="https://rjfontana.github.io/fazenda/">
+      <img src="fazenda.png" alt="Ícone Fazenda" class="icon">
+    </button>
+
+    <button class="btn-alimentos" id="btnAlimentosEmbed" data-url="https://rjfontana.github.io/alimentos/">
+      <img src="alimentos.png" alt="Ícone Alimentos" class="icon">
+    </button>
+
+    <button class="btn-olho" id="btnOnda" data-url="https://rjfontana.github.io/-adivinhacao.py/">
+      <img src="olho.png" alt="Ícone Onda" class="icon">
+    </button>
+
+    <button class="btn-telescopio" id="btnTelescopio" data-url="https://rjfontana.github.io/Telescopio/">
+      <img src="telescopio.png" alt="Ícone Telescópio" class="icon">
+    </button>
+
+    <button class="btn-yoda" id="btnYoda">
+      <img src="yoda.png" alt="Ícone Yoda" class="icon">
+    </button>
+  </div>
+
+  <div id="alimentosEmbed">
+    <div class="embed-box">
+      <div class="embed-buttons">
+        <button id="btnOpenNewTab">Abrir em nova aba</button>
+        <button id="btnCloseAlimentosEmbed">Fechar</button>
+      </div>
+      <iframe id="embedFrame" src="about:blank"></iframe>
+    </div>
+  </div>
+
+  <div id="ondaWebcam">
+    <div class="webcam-box">
+      <button id="btnCloseOndaWebcam">Fechar</button>
+      <iframe id="ondaFrame" src="about:blank" allow="camera; microphone"></iframe>
+    </div>
+  </div>
+
+  <button class="close-modal" id="closeModal">&times;</button>
+
+  <div class="modal-kits" id="modalKits">
+    <div class="grid-kits">
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1M2DqNLRhIiYUpJrwgIGUp3EzCHnQiiF1&usp=drive_copy', '_blank')"><img src="1.png" alt="Produto 1"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1adsBLjzVkk9sVxcsqBaaL-czQJY7pbR6&usp=drive_copy', '_blank')"><img src="2.png" alt="Produto 2"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1adsBLjzVkk9sVxcsqBaaL-czQJY7pbR6&usp=drive_copy', '_blank')"><img src="3.png" alt="Produto 3"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1hKsgNkKZ9g8Gp_9XzyEPCQjzBWXt5Gw5&usp=drive_copy', '_blank')"><img src="4.png" alt="Produto 4"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1RunIYl1qiWg1oiYcXKUsqB9_7Ce8iLj2&usp=drive_copy', '_blank')"><img src="5.png" alt="Produto 5"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1RvWTpRAdxvF7Fo6ZOK6VbP-V3Pspk9Kd&usp=drive_copy', '_blank')"><img src="6.png" alt="Produto 6"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1RvWTpRAdxvF7Fo6ZOK6VbP-V3Pspk9Kd&usp=drive_copy', '_blank')"><img src="7.png" alt="Produto 7"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1syN5tPjoifYJsRrub1_0XYP1o8mUZexj&usp=drive_copy', '_blank')"><img src="8.png" alt="Produto 8"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1syN5tPjoifYJsRrub1_0XYP1o8mUZexj&usp=drive_copy', '_blank')"><img src="9.png" alt="Produto 9"></button>
+
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=16NcE_82jMpRgDlr0klDzRhm7pAPlrf-N&usp=drive_copy', '_blank')"><img src="10.png" alt="Produto 10"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1yxQmXIAqIwQOrp8BmomPwx9oHDpMvnc9&usp=drive_copy', '_blank')"><img src="11.png" alt="Produto 11"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1pEP9ZYWxRjC8FEIg04f4edcyljo1jh18&usp=drive_copy', '_blank')"><img src="12.png" alt="Produto 12"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1lBkH0wFjDRXEIRrxR5e67rFzrVoeIX2u&usp=drive_copy', '_blank')"><img src="13.png" alt="Produto 13"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1tJ-JrbZfu2dDKKeziNeDFWf162JIF5yw&usp=drive_copy', '_blank')"><img src="14.png" alt="Produto 14"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1fSbQmnf-Uu1Jo0Xd_hsEONyLFCpMp3q8&usp=drive_copy', '_blank')"><img src="15.png" alt="Produto 15"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=10W3f5iftoFHnHjIbFberilD4U489O5H7&usp=drive_copy', '_blank')"><img src="16.png" alt="Produto 16"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1E1fxgoEn-KFG9XMpbu1JBVEVQunnvE4d&usp=drive_copy', '_blank')"><img src="17.png" alt="Produto 17"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=13XJWbKU26kURP6t2OaLsLxeUp3VuGewF&usp=drive_copy', '_blank')"><img src="18.png" alt="Produto 18"></button>
+
+      <div class="spacer"></div>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1yZtQ9lW0U3pS7CgnESBrEoOBsgKxi1ZC&usp=drive_copy', '_blank')"><img src="19.png" alt="Produto 19"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=13B-ncr02-sMgJZGKxcaIiCBas4yHcAoV&usp=drive_copy', '_blank')"><img src="20.png" alt="Produto 20"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1Tqd1xGjBinTmJqBemzmtE13-3Qdt5_b4&usp=drive_copy', '_blank')"><img src="21.png" alt="Produto 21"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1MOxEphDQsOCy5Wh55hiRvNpidKuygEP-&usp=drive_copy', '_blank')"><img src="22.png" alt="Produto 22"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1gnZcHiFaD5CmMilvacAKvxRKFRdD5_n3&usp=drive_copy', '_blank')"><img src="23.png" alt="Produto 23"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1ZdGNsNgLRwDAxtxMzWIZtqJ-AtYa-Y6z&usp=drive_copy', '_blank')"><img src="24.png" alt="Produto 24"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=13gwIBh6C2pgJN804N0SWei9fK3J08VAY&usp=drive_copy', '_blank')"><img src="25.png" alt="Produto 25"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1oCp9v9UUw3U_TfVw-kS_lnENcbYxwty4&usp=drive_copy', '_blank')"><img src="26.png" alt="Produto 26"></button>
+
+      <div class="spacer"></div>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1MGSboweDv5hLU4Wa28gpAOw5wG2BegNf&usp=drive_copy', '_blank')"><img src="27.png" alt="Produto 27"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1ua9FG-bZ7uCgc4_v7oDf2UFYvRUsXPF3&usp=drive_copy', '_blank')"><img src="28.png" alt="Produto 28"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1tHY-_I73ilq6nSMInwmpA-f3ChVta7ll&usp=drive_copy', '_blank')"><img src="29.png" alt="Produto 29"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1BmJsg5quZ0y3AgtYax1niSQ64_BWxwFN&usp=drive_copy', '_blank')"><img src="30.png" alt="Produto 30"></button>
+      <button class="btn-product"><img src="31.png" alt="Produto 31"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1t1LhX9ZtQOyZP1l1IL9k8lVgLXmHpWgc&usp=drive_copy', '_blank')"><img src="32.png" alt="Produto 32"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1NBjIdPrx7AOkRmTiBbFs0YpxN3G0Pm2J&usp=drive_copy', '_blank')"><img src="33.png" alt="Produto 33"></button>
+      <button class="btn-product" onclick="window.open('https://drive.google.com/open?id=1ZGtZ5zvsLtsIbkVQd2D-1RAPule-rO3d&usp=drive_copy', '_blank')"><img src="34.png" alt="Produto 34"></button>
+    </div>
+    <p class="kits-info">Para consultar materiais didáticos da banca envie um email para os três: Ernani Barone &lt;barone60@usp.br&gt;, Ricardo Augusto Viana de Lacerda &lt;ricardo.lacerda@usp.br&gt;, Luis Paulo de Carvalho Piassi &lt;lppiassi@usp.br&gt;</p>
+  </div>
+
+  <div class="modal-astro" id="modalAstro">
+    <button id="btnCloseAstro">&times;</button>
+    <img src="astro.png" alt="Astro" class="astro-image">
+  </div>
+
+  <div class="modal-subprojetos" id="modalSubprojetos">
+    <div class="grid-subprojetos">
+      <button class="btn-subprojeto" id="btnOumou">OUMOU</button>
+      <button class="btn-subprojeto" id="btnAgnes">AGNES</button>
+      <button class="btn-subprojeto" id="btnJudith">JUDITH</button>
+      <button class="btn-subprojeto" id="btnLeah">LEAH</button>
+      <button class="btn-subprojeto" id="btnTebello">TEBELLO</button>
+      <button class="btn-subprojeto" id="btnBreedlove">BREEDLOVE</button>
+      <button class="btn-subprojeto" id="btnNned">NNEDI</button>
+      <button class="btn-subprojeto" id="btnMaathai">MAATHAI</button>
+    </div>
+  </div>
+
+  <!-- Modal OUMOU -->
+  <div class="modal-projeto" id="modalOumou">
+    <div class="projeto-box">
+      <button class="btn-close-projeto" id="btnCloseOumou">&times;</button>
+      <h2>OUMOU</h2>
+      <p><strong><a href="https://www.instagram.com/oumou.oficinas" target="_blank" rel="noopener">@oumou.oficinas</a></strong></p>
+      <p><strong>Temas abordados:</strong> Este projeto homenageia Oumou Sy, ícone da moda e cultura senegalesa, que promove a moda africana e valoriza o artesanato como expressão cultural. Inspirados por sua visão, oferecemos um espaço onde costura, design e artesanato se unem para criar peças originais e funcionais, fortalecendo habilidades manuais e criativas. As oficinas perpassam pelo pensamento político, pelo âmbito da sustentabilidade, arte e demais ciências humanas à partir do vasto mundo do têxtil e da moda.</p>
+      <p><strong>Faixa etária:</strong> 11 a 14 anos</p>
+      <p><strong>Público Alvo:</strong> jovens de 11 onze a 14 (quatorze) anos, de qualquer gênero e sexo.</p>
+      <p><strong>Dia:</strong> Quinta-feira</p>
+      <p><strong>Horário:</strong> das 14h às 16h</p>
+      <p><strong>Local:</strong> EACH USP</p>
+      <p><strong>Ponto de encontro:</strong> Elefante Branco (prédio A1), em frente à Banca da Ciência, todas as quartas, às 13h40.</p>
+      <p><strong>Inscrição de novos monitores:</strong> ingresso no grupo do WhatsApp. Contato: 17996294624, Lisa Topa.</p>
+    </div>
+  </div>
+
+  <!-- Modal AGNES -->
+  <div class="modal-projeto" id="modalAgnes">
+    <div class="projeto-box">
+      <button class="btn-close-projeto" id="btnCloseAgnes">&times;</button>
+      <h2>AGNES</h2>
+      <p><strong>Temas abordados:</strong> cuidados em saúde contando com teorias e oficinas práticas, além de discussões sociais importantes para o mundo das mulheres como sustentabilidade, noções de higiene e planejamentos de vida futura.</p>
+      <p><strong>Faixa etária:</strong> 11 a 14 anos</p>
+      <p><strong>Público Alvo:</strong> (Quarta-feira: Geral/ Sexta-feira o grupo menor já montado, com meninas 11 a 14 anos no CCA)</p>
+      <p><strong>Dia:</strong> Quarta-feira e Sexta-feira</p>
+      <p><strong>Horário:</strong> 14h às 16h</p>
+      <p><strong>Ponto de encontro:</strong> Pelo menos um(a) monitor(a) deverá ir para auxiliar na busca das crianças no CCA Keralux às 13h30 e depois retornar com as crianças para o CCA novamente. O restante aguardará na Banca da Ciência.</p>
+      <p>E nas quintas-feiras ocorre no CCA ou então na EACH, visto pela demanda dos funcionários e o planejamento de atividades da semana.</p>
+      <p><strong>Inscrição de novos monitores:</strong> Entrar no link do grupo e se apresentar ou então entrar em contato com as coordenadoras Julia e Sarah.</p>
+    </div>
+  </div>
+
+  <!-- Modal JUDITH -->
+  <div class="modal-projeto" id="modalJudith">
+    <div class="projeto-box">
+      <button class="btn-close-projeto" id="btnCloseJudith">&times;</button>
+      <h2>JUDITH</h2>
+      <p><strong><a href="https://www.instagram.com/projetojudith" target="_blank" rel="noopener">@projetojudith</a></strong></p>
+      <p><strong>Temas abordados:</strong> as crianças do Centro para Crianças e Adolescentes Jd. Keralux (CCA) unem design, inovação, tecnologia e habilidades através de atividades de robótica para sua emancipação e empoderamento, fomentando a Cultura Maker. O objetivo é criar um ambiente que vença as barreiras de gênero e seja propício à exploração, construção e inovação, tornando a tecnologia uma ferramenta de transformação social. O foco das atividades é no desenvolvimento de habilidades práticas, criatividade e resolução de problemas por meio de tecnologias acessíveis.</p>
+      <p><strong>Faixa etária:</strong> segundas-feiras: 8 a 10 anos; terças-feiras: 11 a 14 anos</p>
+      <p><strong>Público Alvo:</strong> jovens de 8 (oito) a 14 (quatorze) anos, divididos em duas turmas, de acordo com a faixa etária, de qualquer gênero e sexo.</p>
+      <p><strong>Dias e horários:</strong> segundas-feiras, 9h00 às 10h30; terças-feiras, das 14h00 às 16h00.</p>
+      <p><strong>Local:</strong> CCA Jd. Keralux, ou espaços da EACH-USP (mediante prévio aviso).</p>
+      <p><strong>Ponto de encontro:</strong> Elefante Branco (prédio A1), em frente à Banca da Ciência, 30 (trinta) minutos antes do início dos encontros.</p>
+      <p><strong>Inscrição de novos monitores:</strong> ingresso no grupo do WhatsApp.</p>
+    </div>
+  </div>
+
+  <!-- Modal LEAH -->
+  <div class="modal-projeto" id="modalLeah">
+    <div class="projeto-box">
+      <button class="btn-close-projeto" id="btnCloseLeah">&times;</button>
+      <h2>LEAH</h2>
+      <p><strong>@grupo.leah</strong></p>
+      <p><strong>Temas abordados:</strong> Inspirado por Leah Penniman, este grupo foca em explorar e promover práticas de alimentação humanizada, justa e sustentável. Nossas atividades incluem experimentação culinária, educação alimentar e o desenvolvimento de práticas que respeitam o meio ambiente e valorizam a justiça alimentar. Aqui, buscamos conectar ciência, cultura e nutrição em iniciativas que transformem a relação com a comida.</p>
+      <p><strong>Faixa etária:</strong> Crianças de 7 à 14 anos.</p>
+      <p><strong>Público alvo:</strong> Crianças do CCA Jardim Keralux.</p>
+      <p><strong>Dia:</strong> Segunda e Sextas (crianças e pré adolescentes).</p>
+      <p><strong>Horário das atividades:</strong> Segunda às 8h e Sexta às 14h.</p>
+      <p><strong>Reuniões:</strong> Presencialmente na EACH pós-atividades, entre às 11h e 12h. Entre bolsistas online vía meet.</p>
+    </div>
+  </div>
+
+  <!-- Modal TEBELLO -->
+  <div class="modal-projeto" id="modalTebello">
+    <div class="projeto-box">
+      <button class="btn-close-projeto" id="btnCloseTebello">&times;</button>
+      <h2>TEBELLO</h2>
+      <p><strong>Temas abordados:</strong> As atividades envolvem ensinar física, química e biologia para crianças de forma lúdica e simplificada. As oficinas incluem a realização de experimentos científicos acessíveis e criativos, utilizando materiais didáticos de baixo custo.</p>
+      <p><strong>Faixa etária:</strong> 11 a 14 anos</p>
+      <p><strong>Público Alvo:</strong> Crianças do CCA Keralux</p>
+      <p><strong>Dia:</strong> Quarta-feira</p>
+      <p><strong>Horário:</strong> 14h às 16h</p>
+      <p><strong>Ponto de encontro:</strong> Pelo menos um(a) monitor(a) irá para auxiliar na busca das crianças no CCA Keralux às 13h30. O Restante aguardará na Banca da Ciência.</p>
+      <p><strong>Mais informações:</strong> (11) 99602-2662 - Chelsee</p>
+    </div>
+  </div>
+
+  <!-- Modal BREEDLOVE -->
+  <div class="modal-projeto" id="modalBreedlove">
+    <div class="projeto-box">
+      <button class="btn-close-projeto" id="btnCloseBreedlove">&times;</button>
+      <h2>BREEDLOVE</h2>
+      <p><strong>Objetivo:</strong> Aplicar práticas sustentáveis, experimentação com recursos naturais, e criação de produtos de valorização estética que respeitam o meio ambiente.</p>
+      <p><strong>Faixa etária:</strong> 8 à 14 anos</p>
+      <p><strong>Público Alvo:</strong> Crianças do CCA Keralux</p>
+      <p><strong>Dia:</strong> Terça- Feira</p>
+      <p><strong>Horário de atuação com as crianças:</strong> 14h às 16h00</p>
+      <p><strong>Ponto de encontro:</strong> Sala de Recursos Didático- Banca</p>
+      <p><strong>Reuniões:</strong> Terças-feiras 16h00- 18h00</p>
+      <p><strong>Inscrição de novos monitores:</strong> Entrar no link do Grupo e se apresentar</p>
+    </div>
+  </div>
+
+  <!-- Modal NNEDI -->
+  <div class="modal-projeto" id="modalNned">
+    <div class="projeto-box">
+      <button class="btn-close-projeto" id="btnCloseNned">&times;</button>
+      <h2>NNEDI</h2>
+      <p><strong>@nnediusp</strong></p>
+      <p><strong>Temas abordados:</strong> Literatura, antirracismo, ficção científica, ciências e literatura e afrofuturismo, fomentar criação de narrativas, textos e aprimorar o interesse pela escrita e criação</p>
+      <p><strong>Faixa etária:</strong> 08 a 14 anos</p>
+      <p><strong>Dia(s):</strong> Quarta-Feira e Quinta-Feira</p>
+      <p><strong>Horário:</strong> 14h às 16h</p>
+      <p><strong>Ponto de encontro:</strong> Pelo menos um(a) monitor(a) deverá ir para auxiliar na busca das crianças no CCA Keralux às 13h30 e depois retornar com as crianças para o CCA novamente. O restante aguardará na Banca da Ciência.</p>
+      <p><strong>Reuniões:</strong> Após a atividade ou agendaremos quando necessário</p>
+      <p><strong>Inscrição de novos monitores:</strong> Entrar no link do Grupo e se apresentar</p>
+      <p><strong>https://chat.whatsapp.com/C2BZ0kCmeUX2hyVbw4Ydgu</strong></p>
+      <p><strong>Mais informações:</strong> 11 96996-7979 - Joice Lima</p>
+    </div>
+  </div>
+
+  <!-- Modal MAATHAI -->
+  <div class="modal-projeto" id="modalMaathai">
+    <div class="projeto-box">
+      <button class="btn-close-projeto" id="btnCloseMaathai">&times;</button>
+      <h2>MAATHAI</h2>
+      <p><strong>Meio Ambiente, Arte, Tecnologia e Humanidades em Ações Inclusivas</strong></p>
+      <p><strong>@maathai.meioambiente</strong></p>
+      <p>Este grupo, inspirado pela ativista ambiental Wangari Maathai, reúne iniciativas que integram meio ambiente, arte, tecnologia e humanidades em prol da inclusão. Nosso objetivo é promover ações que conectem esses temas, trazendo inovação e consciência ambiental em projetos que envolvam e transformem a comunidade.</p>
+      <p><strong>Redes Sociais:</strong></p>
+      <p><strong>E-mail - maathai.usp@gmail.com</strong></p>
+    </div>
+  </div>
+
+  <!-- Modal Yoda -->
+  <div class="modal-yoda" id="modalYoda">
+    <div class="yoda-panel">
+      <button class="btn-close-yoda" id="btnCloseYoda">&times;</button>
+      <div id="simulador-root"></div>
+    </div>
+  </div>
+
+  <script type="text/babel">
+    const { useState, useRef } = React;
+
+    const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+    const generateProblem = () => {
+      const m1 = randInt(1, 4);
+      const m2 = randInt(1, 4);
+      const m3 = randInt(1, 4);
+      const mSum = m1 + m2 + m3;
+      const adjust = 10 - mSum;
+      const extra = Math.max(0, adjust);
+      const m3final = m3 + extra;
+      const mp = 10;
+      const totalM = m1 + m2 + m3final + mp;
+
+      const sats = [
+        { m: m1, x: randInt(1, 9), y: randInt(1, 9) },
+        { m: m2, x: randInt(1, 9), y: randInt(1, 9) },
+        { m: m3final, x: randInt(1, 9), y: randInt(1, 9) }
+      ];
+
+      const trueX = randInt(2, 18) / 2;
+      const trueY = randInt(2, 18) / 2;
+
+      const sumMx = sats[0].m * sats[0].x + sats[1].m * sats[1].x + sats[2].m * sats[2].x;
+      const sumMy = sats[0].m * sats[0].y + sats[1].m * sats[1].y + sats[2].m * sats[2].y;
+
+      const targetCmX = (sumMx + mp * trueX) / totalM;
+      const targetCmY = (sumMy + mp * trueY) / totalM;
+
+      return { sats, mp, totalM, trueX, trueY, sumMx, sumMy, targetCmX, targetCmY };
+    };
+
+    const JediArchiveSimulator = () => {
+      const [problem, setProblem] = useState(() => generateProblem());
+      const [planetX, setPlanetX] = useState(5.0);
+      const [planetY, setPlanetY] = useState(5.0);
+      const [userAnswerX, setUserAnswerX] = useState('');
+      const [userAnswerY, setUserAnswerY] = useState('');
+      const [hasAdjusted, setHasAdjusted] = useState(false);
+      const [showNextClue, setShowNextClue] = useState(false);
+      const [showNextModal, setShowNextModal] = useState(false);
+      const [nextAnswer, setNextAnswer] = useState('');
+      const [nextCorrect, setNextCorrect] = useState(false);
+      const [showLibraryClue, setShowLibraryClue] = useState(false);
+      const [libraryAnswer, setLibraryAnswer] = useState('');
+      const [libraryCorrect, setLibraryCorrect] = useState(false);
+
+      const svgRef = useRef(null);
+
+      const currentCmX = (problem.sumMx + problem.mp * planetX) / problem.totalM;
+      const currentCmY = (problem.sumMy + problem.mp * planetY) / problem.totalM;
+
+      const parsedX = parseFloat(userAnswerX);
+      const parsedY = parseFloat(userAnswerY);
+      const isXCorrect = !isNaN(parsedX) && Math.abs(parsedX - problem.trueX) < 0.05;
+      const isYCorrect = !isNaN(parsedY) && Math.abs(parsedY - problem.trueY) < 0.05;
+      const isSuccess = isXCorrect && isYCorrect;
+
+      const handleRestart = () => {
+        setProblem(generateProblem());
+        setPlanetX(5.0);
+        setPlanetY(5.0);
+        setUserAnswerX('');
+        setUserAnswerY('');
+      };
+
+      const handleMapClick = (e) => {
+        if (!svgRef.current) return;
+        const rect = svgRef.current.getBoundingClientRect();
+        const relX = (e.clientX - rect.left) / rect.width;
+        const relY = (e.clientY - rect.top) / rect.height;
+        const newX = Math.min(10, Math.max(0, relX * 10));
+        const newY = Math.min(10, Math.max(0, 10 - relY * 10));
+        setPlanetX(Math.round(newX * 100) / 100);
+        setPlanetY(Math.round(newY * 100) / 100);
+        setHasAdjusted(true);
+      };
+
+      const toSvgX = (val) => `${val * 10}%`;
+      const toSvgY = (val) => `${100 - (val * 10)}%`;
+
+      return (
+        showNextModal ? (
+          <div className="h-screen bg-white flex items-start justify-center pt-6 pb-10 px-4 overflow-y-auto">
+            <div className="bg-white border border-gray-300 rounded-lg p-6 max-w-6xl w-full mx-4 mt-4 mb-4">
+              <button onClick={() => { setShowNextModal(false); setShowLibraryClue(false); setNextCorrect(false); setLibraryCorrect(false); }} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
+
+              {!showLibraryClue ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex flex-col gap-4">
+                    <div className="h-0 grow">
+                      <video controls preload="metadata" className="w-full h-full max-h-[28rem] rounded object-cover">
+                        <source src="caixadagua.mp4" type="video/mp4" />
+                        Seu navegador não suporta vídeo.
+                      </video>
+                    </div>
+                    <div className="p-2 rounded border border-gray-300 bg-gray-50">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Resposta</label>
+                      <input
+                        type="text"
+                        value={nextAnswer}
+                        onChange={(e) => setNextAnswer(e.target.value)}
+                        placeholder="Digite sua resposta"
+                        className="w-full p-2 border border-gray-300 rounded"
+                      />
+                      <button
+                        onClick={() => {
+                          const normalized = nextAnswer.trim().toLowerCase();
+                          if (normalized === '40m' || normalized === '40') {
+                            setNextCorrect(true);
+                          }
+                        }}
+                        className="mt-3 w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        Enviar
+                      </button>
+                      {nextCorrect && (
+                        <button onClick={() => setShowLibraryClue(true)} className="mt-2 w-full px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                          Próxima pista
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-center">
+                    <img src="questao.png" alt="Questão" className="w-full max-h-[32rem] rounded border border-gray-300" />
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex justify-center items-start">
+                    <img src="biblioteca.png" alt="Biblioteca" className="w-full max-h-[32rem] rounded" />
+                  </div>
+                  <div className="flex flex-col justify-center">
+                    <h3 className="text-lg font-bold mb-2">Senha do Fóssil</h3>
+                    <p className="text-sm mb-4">Vá à biblioteca da EACH-USP e escreva o nome desse fóssil da imagem.</p>
+                    <input
+                      type="text"
+                      value={libraryAnswer}
+                      onChange={(e) => setLibraryAnswer(e.target.value)}
+                      placeholder="Escreva o nome do fóssil"
+                      className="w-full p-2 border border-gray-300 rounded mb-2"
+                    />
+                    <button
+                      onClick={() => {
+                        const norm = libraryAnswer.trim();
+                        if (['archaeopteryx', 'archaeopteryx lithographica'].includes(norm.toLowerCase())) {
+                          setLibraryCorrect(true);
+                        }
+                      }}
+                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    >
+                      Enviar
+                    </button>
+                    {libraryCorrect && (
+                      <>
+                        <div className="mt-3 p-3 rounded border border-green-500 bg-green-50 text-green-800">
+                          Parabéns! senha correta.
+                        </div>
+                        <div className="mt-4 flex justify-center">
+                          <a href="https://www.instagram.com/nnediusp/" target="_blank" rel="noopener noreferrer">
+                            <img src="ultima.png" alt="Última" className="w-full max-w-6xl max-h-[80vh] rounded border border-gray-300 object-contain cursor-pointer" />
+                          </a>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="h-screen bg-zinc-950 text-green-500 font-mono p-4 md:p-8 overflow-auto">
+            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <div className="lg:col-span-5 bg-zinc-900/70 border border-green-800 rounded-xl p-4">
+                <h2 className="text-xl text-green-300 font-bold mb-2">Planeta Oculto Detectado</h2>
+                <div className="mb-4 rounded-lg overflow-hidden border border-green-700">
+                  <video controls preload="metadata" className="w-full max-h-52 bg-black" poster="yoda-poster.jpg">
+                    <source src="yoda.mp4" type="video/mp4" />
+                    Seu navegador não suporta vídeo HTML5.
+                  </video>
+                </div>
+                <p className="text-sm text-green-200 mb-2">Durante uma análise no arquivo estelar Jedi, Obi-Wan Kenobi percebe uma inconsistência: o centro de massa de um sistema planetário registrado não coincide com os planetas atualmente visíveis.</p>
+                <p className="text-sm text-green-200 mb-3">Sabe-se que um planeta foi removido dos registros. A massa do planeta oculto é <strong>mp = 10</strong>. O centro de massa registrado do sistema é <strong>{problem.targetCmX.toFixed(2)}, {problem.targetCmY.toFixed(2)}</strong> (a cada atualização esse valor muda), mas os três satélites visíveis não justificam essa posição. Use o radar para deduzir onde o planeta ausente deveria estar!</p>
+                <p className="text-xs text-green-300 mb-4">CM Atual do Radar: <strong>{currentCmX.toFixed(3)}, {currentCmY.toFixed(3)}</strong></p>
+
+                <div className="mb-3 bg-black/40 rounded-lg p-3 border border-green-900">
+                  <label className="flex justify-between text-xs text-green-400">X do Planeta Radar<span>{planetX.toFixed(2)}</span></label>
+                  <input type="range" min="0" max="10" step="0.01" value={planetX} onChange={(e) => { setPlanetX(parseFloat(e.target.value)); setHasAdjusted(true); }} className="w-full accent-green-500" />
+                  <label className="flex justify-between text-xs text-green-400 mt-2">Y do Planeta Radar<span>{planetY.toFixed(2)}</span></label>
+                  <input type="range" min="0" max="10" step="0.01" value={planetY} onChange={(e) => { setPlanetY(parseFloat(e.target.value)); setHasAdjusted(true); }} className="w-full accent-green-500" />
+                </div>
+
+                <div className="bg-black/40 p-3 rounded-lg border border-green-900 mb-3 text-xs text-green-300">
+                  <p className="font-bold text-green-400">Fórmulas</p>
+                  <p>X_cm = (m1·x1 + m2·x2 + m3·x3 + mp·X) / Σm</p>
+                  <p>Y_cm = (m1·y1 + m2·y2 + m3·y3 + mp·Y) / Σm</p>
+                </div>
+
+                <div className="grid grid-cols-1 gap-2 mb-3">
+                  <div className="relative">
+                    <input type="number" step="0.1" value={userAnswerX} onChange={(e) => setUserAnswerX(e.target.value)} placeholder="Resposta X oculto" disabled={!hasAdjusted} className={`w-full ${hasAdjusted ? 'bg-black/30' : 'bg-black/20'} border border-green-800 rounded px-2 py-1 text-sm text-green-100 ${!hasAdjusted ? 'opacity-50 cursor-not-allowed' : ''}`} />
+                    {isXCorrect && <span className="absolute right-2 top-1/2 -translate-y-1/2 text-green-400">✔</span>}
+                  </div>
+                  <div className="relative">
+                    <input type="number" step="0.1" value={userAnswerY} onChange={(e) => setUserAnswerY(e.target.value)} placeholder="Resposta Y oculto" disabled={!hasAdjusted} className={`w-full ${hasAdjusted ? 'bg-black/30' : 'bg-black/20'} border border-green-800 rounded px-2 py-1 text-sm text-green-100 ${!hasAdjusted ? 'opacity-50 cursor-not-allowed' : ''}`} />
+                    {isYCorrect && <span className="absolute right-2 top-1/2 -translate-y-1/2 text-green-400">✔</span>}
+                  </div>
+                </div>
+
+                {!hasAdjusted ? (
+                  <div className="border border-dashed border-green-700 p-2 rounded text-xs text-green-300">Ajuste X e Y do Planeta Radar para liberar as respostas.</div>
+                ) : !isSuccess ? (
+                  <div className="border border-dashed border-green-700 p-2 rounded text-xs text-green-300">Tente encontrar as coordenadas exatas (precisão 0.05) para ativar a resolução.</div>
+                ) : (
+                  <div className="bg-black/40 p-3 rounded border border-green-700 text-xs text-green-100">
+                    <p className="font-bold text-green-300 mb-2">Parabéns! respostas corretas.</p>
+                    <p>X verdadeiro: {problem.trueX.toFixed(1)}</p>
+                    <p>Y verdadeiro: {problem.trueY.toFixed(1)}</p>
+                    <p className="mt-2">Resolução passo a passo:</p>
+                    <p>X_cm = ({problem.sumMx} + {problem.mp}·X) / {problem.totalM}</p>
+                    <p>{problem.targetCmX.toFixed(2)} = ({problem.sumMx} + {problem.mp}·X) / {problem.totalM}</p>
+                    <p>X = {problem.trueX.toFixed(1)}</p>
+                    <p className="mt-2">Y_cm = ({problem.sumMy} + {problem.mp}·Y) / {problem.totalM}</p>
+                    <p>{problem.targetCmY.toFixed(2)} = ({problem.sumMy} + {problem.mp}·Y) / {problem.totalM}</p>
+                    <p>Y = {problem.trueY.toFixed(1)}</p>
+                    <button onClick={() => setShowNextModal(true)} className="mt-3 px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded text-sm">Próxima pista</button>
+                  </div>
+                )}
+
+                {isSuccess && (
+                  <>
+                    <button onClick={handleRestart} className="mt-3 w-full py-2 bg-green-600 hover:bg-green-500 text-black rounded font-bold">Gerar Novo Problema</button>
+                  </>
+                )}
+              </div>
+
+              <div className="lg:col-span-7 relative bg-zinc-950 border border-green-900 rounded-xl p-3">
+                <svg ref={svgRef} viewBox="0 0 100 100" className="w-full h-[80vh] rounded-lg bg-black/40 border border-green-800" onClick={handleMapClick}>
+                  {[...Array(21)].map((_, i) => (
+                    <g key={`grid-${i}`}>
+                      <line x1={`${i*5}`} y1="0" x2={`${i*5}`} y2="100" stroke={i % 2 === 0 ? 'rgba(34, 197, 94, 0.35)' : 'rgba(34, 197, 94, 0.15)'} strokeWidth={i % 2 === 0 ? 0.3 : 0.15} />
+                      <line x1="0" y1={`${i*5}`} x2="100" y2={`${i*5}`} stroke={i % 2 === 0 ? 'rgba(34, 197, 94, 0.35)' : 'rgba(34, 197, 94, 0.15)'} strokeWidth={i % 2 === 0 ? 0.3 : 0.15} />
+                      {i % 2 === 0 && i < 20 && (
+                        <text x={`${i*5 + 1}`} y="98" fill="#22c55e" fontSize="2.5">{i/2}</text>
+                      )}
+                    </g>
+                  ))}
+
+                  {/* Satélites visíveis */}
+                  {problem.sats.map((sat, index) => (
+                    <g key={`sat-${index}`}>
+                      <circle cx={sat.x * 10} cy={100 - sat.y * 10} r={2 + sat.m * 0.5} fill={[ '#86efac', '#4ade80', '#22c55e'][index]} stroke="#0f766e" strokeWidth="0.2" />
+                      <text x={sat.x * 10 + 3} y={100 - sat.y * 10 - 2} fill="#a7f3d0" fontSize="2.5">m{index+1}={sat.m}</text>
+                    </g>
+                  ))}
+
+                  {/* Centro de massa registrado */}
+                  <g>
+                    <circle cx={problem.targetCmX * 10} cy={100 - problem.targetCmY * 10} r="3.3" fill="none" stroke="#f59e0b" strokeWidth="0.8" />
+                    <circle cx={problem.targetCmX * 10} cy={100 - problem.targetCmY * 10} r="1.6" fill="#f59e0b" opacity="0.8" />
+                    <path d={`M ${problem.targetCmX * 10 - 1.7} ${100 - problem.targetCmY * 10} h 3.4 M ${problem.targetCmX * 10} ${100 - problem.targetCmY * 10 - 1.7} v 3.4`} stroke="#fde68a" strokeWidth="0.6" />
+                  </g>
+
+                  {/* Planeta Radar e Centro Atual */}
+                  <g>
+                    <circle cx={planetX * 10} cy={100 - planetY * 10} r="3.6" fill="#10b981" opacity="0.95" />
+                    <circle cx={planetX * 10} cy={100 - planetY * 10} r="6" fill="none" stroke="#34d399" strokeWidth="0.3" strokeDasharray="2 2" />
+                    <text x={planetX * 10 + 2} y={100 - planetY * 10 - 2} fill="#6ee7b7" fontSize="2.5">Radar</text>
+                  </g>
+
+                  <g>
+                    <circle cx={currentCmX * 10} cy={100 - currentCmY * 10} r="2.2" fill="#ef4444" />
+                    <circle cx={currentCmX * 10} cy={100 - currentCmY * 10} r="5" stroke="#fca5a5" strokeWidth="0.2" fill="none" />
+                  </g>
+
+                  {/* Linha comparativa */}
+                  <line x1={planetX * 10} y1={100 - planetY * 10} x2={currentCmX * 10} y2={100 - currentCmY * 10} stroke="#22c55e" strokeWidth="0.4" strokeDasharray="2 1" />
+                </svg>
+
+                {isSuccess && (
+                  <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center text-center p-4">
+                    <div className="bg-zinc-900 border border-green-500 p-4 rounded-lg">
+                      <p className="text-green-300 font-bold text-xl mb-2">Posição Encontrada!</p>
+                      <p className="text-sm text-green-200 mb-3">Os seus cálculos estão corretos.</p>
+                      <button onClick={handleRestart} className="px-4 py-2 bg-green-600 hover:bg-green-500 rounded text-black font-bold">Gerar Novo Problema</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById('simulador-root')).render(<JediArchiveSimulator />);
+  </script>
+
+  <div style="height: 260vh;"></div>
+
+  <footer class="footer" id="mainFooter">
+    <div class="footer-content">
+      <div class="footer-logos">
+        <img src="usp.png" alt="Logo USP">
+        <img src="eachusp.png" alt="Logo EACH-USP">
+        <img src="capes.png" alt="Logo CAPES">
+        <img src="fapesp.png" alt="Logo FAPESP">
+      </div>
+      <div class="footer-section">
+        <h3>Contatos e Redes Sociais</h3>
+        <div class="contact-info">
+          <div class="contact-item">
+            <img src="email.png" alt="Email" class="contact-icon">
+            <a href="mailto:bancadacienciausp@gmail.com">bancadacienciausp@gmail.com</a>
+          </div>
+          <div class="social-links">
+            <a href="https://instagram.com/bancadaciencia" target="_blank" class="social-item">
+              <img src="instagram.png" alt="Instagram bancadaciencia" class="social-icon">
+              <span>@bancadaciencia</span>
+            </a>
+            <a href="https://instagram.com/bancadacienciaeach" target="_blank" class="social-item">
+              <img src="instagram.png" alt="Instagram bancadacienciaeach" class="social-icon">
+              <span>@bancadacienciaeach</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="scripts.js" defer></script>
+</body>
+</html>
