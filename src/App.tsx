@@ -69,15 +69,15 @@ export function App() {
             {/* MENU SUPERIOR (Os botões principais)       */}
             {/* ========================================== */}
             <div className="top-buttons">
-                <button className="btn-kits" onClick={() => setActiveModal('kits')}><img src="/pasta.png" alt="Pasta" className="icon" /></button>
-                <button className="btn-aexestrela" onClick={() => setEmbedUrl(links.aexestrela)}><img src="/aexestrela.png" alt="Aexestrela" className="icon" /></button>
-                <button className="btn-planos" onClick={() => window.open(links.planos, '_blank')}><img src="/planos.png" alt="Planos" className="icon" /></button>
-                <button className="btn-fazenda" onClick={() => setEmbedUrl(links.fazenda)}><img src="/fazenda.png" alt="Fazenda" className="icon" /></button>
-                <button className="btn-alimentos" onClick={() => setEmbedUrl(links.alimentos)}><img src="/alimentos.png" alt="Alimentos" className="icon" /></button>
-                <button className="btn-olho" onClick={() => setOndaUrl(links.onda)}><img src="/olho.png" alt="Onda" className="icon" /></button>
-                <button className="btn-telescopio" onClick={() => setEmbedUrl(links.telescopio)}><img src="/telescopio.png" alt="Telescópio" className="icon" /></button>
-                <button className="btn-foton" onClick={() => setActiveModal('foton')}><img src="/foton.png" alt="Foton" className="icon" /></button>
-                <button className="btn-pressao" onClick={() => setActiveModal('pressao')}><img src="/pressao.png" alt="Pressão" className="icon" /></button>
+                <button className="btn-kits" onClick={() => setActiveModal('kits')}><img src="./images/pasta.png" alt="Pasta" className="icon" /></button>
+                <button className="btn-aexestrela" onClick={() => setEmbedUrl(links.aexestrela)}><img src="./images/aexestrela.png" alt="Aexestrela" className="icon" /></button>
+                <button className="btn-planos" onClick={() => window.open(links.planos, '_blank')}><img src="./images/planos.png" alt="Planos" className="icon" /></button>
+                <button className="btn-fazenda" onClick={() => setEmbedUrl(links.fazenda)}><img src="./images/fazenda.png" alt="Fazenda" className="icon" /></button>
+                <button className="btn-alimentos" onClick={() => setEmbedUrl(links.alimentos)}><img src="./images/alimentos.png" alt="Alimentos" className="icon" /></button>
+                <button className="btn-olho" onClick={() => setOndaUrl(links.onda)}><img src="./images/olho.png" alt="Onda" className="icon" /></button>
+                <button className="btn-telescopio" onClick={() => setEmbedUrl(links.telescopio)}><img src="./images/telescopio.png" alt="Telescópio" className="icon" /></button>
+                <button className="btn-foton" onClick={() => setActiveModal('foton')}><img src="./images/foton.png" alt="Foton" className="icon" /></button>
+                <button className="btn-pressao" onClick={() => setActiveModal('pressao')}><img src="./images/pressao.png" alt="Pressão" className="icon" /></button>
                 {/* Adicione o botão do Yoda aqui se for abrir o simulador React */}
             </div>
 
@@ -93,13 +93,13 @@ export function App() {
                 onMouseLeave={() => setIsHoveringBoi(false)}
                 onClick={() => setActiveModal('subprojetos')}
             >
-                <img src="/subprojetos.png" alt="Subprojetos" style={{ width: '100%', height: '100%' }} />
+                <img src="./images/subprojetos.png" alt="Subprojetos" style={{ width: '100%', height: '100%' }} />
             </button>
 
             {/* Balões do Boi */}
             {isHoveringBoi && (
                 <div className="dialog-images active" style={{ opacity: 1, visibility: 'visible' }}>
-                    <img src={`/dialogo${dialogIndex + 1}.png`} alt={`Diálogo`} className="dialog-img active" />
+                    <img src={`./images/dialogo${dialogIndex + 1}.png`} alt={`Diálogo`} className="dialog-img active" />
                 </div>
             )}
 
@@ -136,9 +136,9 @@ export function App() {
                 <div className="modal-kits active" onClick={closeModal}>
                     <button className="close-modal active" onClick={closeModal}>&times;</button>
                     <div className="grid-kits" onClick={(e) => e.stopPropagation()}>
-                        <button className="btn-product" onClick={() => window.open('https://drive.google.com/open?id=1M2DqNLRhIiYUpJrwgIGUp3EzCHnQiiF1&usp=drive_copy', '_blank')}><img src="/1.png" alt="Produto 1"/></button>
-                        <button className="btn-product" onClick={() => window.open('https://drive.google.com/open?id=1adsBLjzVkk9sVxcsqBaaL-czQJY7pbR6&usp=drive_copy', '_blank')}><img src="/2.png" alt="Produto 2"/></button>
-                        <button className="btn-product" onClick={() => window.open('https://drive.google.com/open?id=1hKsgNkKZ9g8Gp_9XzyEPCQjzBWXt5Gw5&usp=drive_copy', '_blank')}><img src="/3.png" alt="Produto 3"/></button>
+                        <button className="btn-product" onClick={() => window.open('https://drive.google.com/open?id=1M2DqNLRhIiYUpJrwgIGUp3EzCHnQiiF1&usp=drive_copy', '_blank')}><img src="./images/1.png" alt="Produto 1"/></button>
+                        <button className="btn-product" onClick={() => window.open('https://drive.google.com/open?id=1adsBLjzVkk9sVxcsqBaaL-czQJY7pbR6&usp=drive_copy', '_blank')}><img src="./images/2.png" alt="Produto 2"/></button>
+                        <button className="btn-product" onClick={() => window.open('https://drive.google.com/open?id=1hKsgNkKZ9g8Gp_9XzyEPCQjzBWXt5Gw5&usp=drive_copy', '_blank')}><img src="./images/3.png" alt="Produto 3"/></button>
                         {/* Você pode colar o restante dos botões de Kits aqui dentro */}
                     </div>
                 </div>
@@ -171,7 +171,7 @@ export function App() {
             {activeModal === 'astro' && (
                 <div className="modal-astro active" onClick={closeModal}>
                     <button id="btnCloseAstro" onClick={closeModal}>&times;</button>
-                    <img src="/astro.png" alt="Astro" className="astro-image" onClick={(e) => e.stopPropagation()} />
+                    <img src="./images/astro.png" alt="Astro" className="astro-image" onClick={(e) => e.stopPropagation()} />
                 </div>
             )}
 
