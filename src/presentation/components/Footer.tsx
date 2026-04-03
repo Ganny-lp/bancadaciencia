@@ -36,12 +36,11 @@ export const Footer = () => {
                     </button>
 
                     {/* Balões de diálogo ajustados para não causarem barra de rolagem horizontal */}
-                    {/* Balões de diálogo ajustados */}
                     {isHoveringBoi && (
-                        <div className="absolute bottom-[75%] left-16 md:left-24 lg:left-36 w-36 md:w-48 lg:w-64 max-h-40 pointer-events-none transition-opacity duration-300">
+                        <div className="absolute bottom-[82%] left-20 md:left-28 lg:left-40 w-48 md:w-64 lg:w-80 max-h-[180px] pointer-events-none transition-opacity duration-300">
                             <img
                                 src={`./images/dialogo${dialogIndex + 1}.png`}
-                                className="w-full h-auto max-h-40 object-contain animate-bounce"
+                                className="w-full h-auto max-h-[180px] object-contain animate-bounce"
                                 alt="Diálogo"
                             />
                         </div>
