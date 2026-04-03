@@ -8,7 +8,7 @@ export class GetExternalLinksUseCase {
             onda: 'https://rjfontana.github.io/-adivinhacao.py/',
             telescopio: 'https://rjfontana.github.io/Telescopio/',
             foton: 'https://rjfontana.github.io/foton/',
-            yoda: 'https://github.com/Ganny-lp/jedi-archive-simulator/a'
+            yoda: 'https://ganny-lp.github.io/jedi-archive-simulator/'
         };
     }
 }
