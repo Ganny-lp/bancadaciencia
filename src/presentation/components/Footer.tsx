@@ -37,10 +37,10 @@ export const Footer = () => {
 
                     {/* Balões de diálogo ajustados para não causarem barra de rolagem horizontal */}
                     {isHoveringBoi && (
-                        <div className="absolute bottom-[82%] left-20 md:left-28 lg:left-40 w-48 md:w-64 lg:w-80 max-h-[180px] pointer-events-none transition-opacity duration-300">
+                        <div className="absolute bottom-[78%] left-8 md:left-12 lg:left-16 w-56 md:w-72 lg:w-80 max-h-[200px] pointer-events-none transition-opacity duration-300">
                             <img
                                 src={`./images/dialogo${dialogIndex + 1}.png`}
-                                className="w-full h-auto max-h-[180px] object-contain animate-bounce"
+                                className="w-full h-auto object-contain"
                                 alt="Diálogo"
                             />
                         </div>
@@ -93,7 +93,7 @@ export const Footer = () => {
                                 <span className="text-[#d5efff] text-[11px] md:text-xs lg:text-sm hidden sm:inline">@bancadaciencia</span>
                             </a>
                             <a href="https://instagram.com/bancadacienciaeach" target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 p-1.5 md:p-2 rounded-lg hover:bg-white/15 transition-all">
-                                <img src="./instagram.png" alt="Instagram EACH" className="w-4 h-4 md:w-5 md:h-5" />
+                                <img src="./images/instagram.png" alt="Instagram EACH" className="w-4 h-4 md:w-5 md:h-5" />
                                 <span className="text-[#d5efff] text-[11px] md:text-xs lg:text-sm hidden sm:inline">@bancadacienciaeach</span>
                             </a>
                         </div>
