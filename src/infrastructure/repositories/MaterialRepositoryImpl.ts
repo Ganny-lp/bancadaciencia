@@ -35,7 +35,7 @@ export class MaterialRepositoryImpl implements IMaterialRepository {
             new Material('1ua9FG-bZ7uCgc4_v7oDf2UFYvRUsXPF3', 'Produto 28', './images/28.png', 'KIT'),
             new Material('1tHY-_I73ilq6nSMInwmpA-f3ChVta7ll', 'Produto 29', './images/29.png', 'KIT'),
             new Material('1BmJsg5quZ0y3AgtYax1niSQ64_BWxwFN', 'Produto 30', './images/30.png', 'KIT'),
-            new Material('', 'Produto 31', '/images/31.png', 'KIT'), // O produto 31 não tinha link no HTML original
+            new Material('', 'Produto 31', './images/31.png', 'KIT'), // O produto 31 não tinha link no HTML original
             new Material('1t1LhX9ZtQOyZP1l1IL9k8lVgLXmHpWgc', 'Produto 32', './images/32.png', 'KIT'),
             new Material('1NBjIdPrx7AOkRmTiBbFs0YpxN3G0Pm2J', 'Produto 33', './images/33.png', 'KIT'),
             new Material('1ZGtZ5zvsLtsIbkVQd2D-1RAPule-rO3d', 'Produto 34', './images/34.png', 'KIT'),
