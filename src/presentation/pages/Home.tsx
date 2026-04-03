@@ -6,7 +6,7 @@ import { Footer } from '../components/Footer';
 import { MaterialRepositoryImpl } from '../../infrastructure/repositories/MaterialRepositoryImpl';
 import { GetMaterialsUseCase } from '../../domain/usecases/GetMaterialsUseCase';
 import { GetExternalLinksUseCase } from '../../domain/usecases/GetExternalLinksUseCase';
-import { JediArchiveSimulator } from '../components/JediArchiveSimulator';
+
 const repository = new MaterialRepositoryImpl();
 const getMaterialsUseCase = new GetMaterialsUseCase(repository);
 const getLinksUseCase = new GetExternalLinksUseCase();
@@ -249,11 +249,28 @@ export const Home = () => {
 
             {/* MODAL YODA (Simulador Jedi Archive) */}
             {activeModal === 'YODA' && (
-                <div className="fixed inset-0 bg-[#0a0a0a] z-[300] flex flex-col items-center justify-center">
-                    <button onClick={closeModal} className="fixed top-6 right-8 text-5xl text-green-500 hover:scale-110 transition-all z-[310]">&times;</button>
-                    {/* Aqui você deve renderizar o seu componente do Yoda que foi migrado do legado */}
-                    <div className="w-full h-full max-w-6xl p-4">
-                        <JediArchiveSimulator />
+                <div className="fixed inset-0 bg-black/80 z-[200] flex items-center justify-center p-4">
+                    <div className="bg-white rounded-2xl w-full max-w-7xl h-[90vh] relative">
+                        <div className="absolute top-2 right-2 flex gap-2 z-10">
+                            <button
+                                onClick={() => window.open(links.yoda, '_blank')}
+                                className="bg-banca-escuro text-white p-2 rounded text-xs"
+                            >
+                                Nova Aba
+                            </button>
+                            <button
+                                onClick={closeModal}
+                                className="bg-red-600 text-white p-2 rounded text-xs"
+                            >
+                                Fechar
+                            </button>
+                        </div>
+                        <iframe
+                            src={links.yoda}
+                            title="Simulador Jedi Archive"
+                            className="w-full h-full rounded-2xl"
+                            allow="fullscreen"
+                        />
                     </div>
                 </div>
             )}

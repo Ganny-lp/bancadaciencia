@@ -7,8 +7,8 @@ export class GetExternalLinksUseCase {
             alimentos: 'https://rjfontana.github.io/alimentos/',
             onda: 'https://rjfontana.github.io/-adivinhacao.py/',
             telescopio: 'https://rjfontana.github.io/Telescopio/',
-            // Foton/Bulb ainda usa um link de suporte, mas o modal é especial
-            foton: 'https://rjfontana.github.io/foton/'
+            foton: 'https://rjfontana.github.io/foton/',
+            yoda: 'https://github.com/Ganny-lp/jedi-archive-simulator/a'
         };
     }
 }
