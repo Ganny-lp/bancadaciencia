@@ -64,12 +64,12 @@ export const Footer = () => {
                         className="h-8 md:h-10 lg:h-12 w-auto opacity-90 hover:opacity-100 transition-all filter drop-shadow-md"
                     />
                     <img
-                        src="/assets/logos/capes.png"
+                        src="/images/capes.png"
                         alt="Logo CAPES"
                         className="h-8 md:h-10 lg:h-12 w-auto opacity-90 hover:opacity-100 transition-all filter drop-shadow-md"
                     />
                     <img
-                        src="/assets/logos/fapesp.png"
+                        src="/images/fapesp.png"
                         alt="Logo FAPESP"
                         className="h-[14px] md:h-[18px] lg:h-[22px] w-auto opacity-90 hover:opacity-100 transition-all filter drop-shadow-md"
                     />
@@ -81,7 +81,7 @@ export const Footer = () => {
 
                     <div className="flex flex-col gap-2 items-center md:items-end">
                         <div className="flex items-center gap-2 bg-white/5 p-1.5 md:p-2 rounded-lg hover:bg-white/15 transition-all w-fit">
-                            <img src="/assets/icons/email.png" alt="Email" className="w-4 h-4 md:w-5 md:h-5" />
+                            <img src="/images/email.png" alt="Email" className="w-4 h-4 md:w-5 md:h-5" />
                             <a href="mailto:bancadacienciausp@gmail.com" className="text-[#d5efff] text-[11px] md:text-xs lg:text-sm">
                                 bancadacienciausp@gmail.com
                             </a>
@@ -89,11 +89,11 @@ export const Footer = () => {
 
                         <div className="flex gap-2 justify-center md:justify-end">
                             <a href="https://instagram.com/bancadaciencia" target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 p-1.5 md:p-2 rounded-lg hover:bg-white/15 transition-all">
-                                <img src="/assets/icons/instagram.png" alt="Instagram" className="w-4 h-4 md:w-5 md:h-5" />
+                                <img src="/images/instagram.png" alt="Instagram" className="w-4 h-4 md:w-5 md:h-5" />
                                 <span className="text-[#d5efff] text-[11px] md:text-xs lg:text-sm hidden sm:inline">@bancadaciencia</span>
                             </a>
                             <a href="https://instagram.com/bancadacienciaeach" target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white/5 p-1.5 md:p-2 rounded-lg hover:bg-white/15 transition-all">
-                                <img src="/assets/icons/instagram.png" alt="Instagram EACH" className="w-4 h-4 md:w-5 md:h-5" />
+                                <img src="/images/instagram.png" alt="Instagram EACH" className="w-4 h-4 md:w-5 md:h-5" />
                                 <span className="text-[#d5efff] text-[11px] md:text-xs lg:text-sm hidden sm:inline">@bancadacienciaeach</span>
                             </a>
                         </div>
