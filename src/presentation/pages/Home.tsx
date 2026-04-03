@@ -99,7 +99,12 @@ export const Home = () => {
             <button
                 id="btnEachOfficial"
                 onClick={() => openModal('HISTORICO')}
-                className="fixed top-5 left-5 w-[100px] h-[100px] rounded-full border-none bg-transparent bg-no-repeat bg-center bg-contain z-[120] cursor-pointer shadow-lg hover:scale-105 transition-transform"
+                className="fixed
+               top-5 left-5
+               max-[768px]:bottom-5 max-[768px]:top-auto max-[768px]:left-5
+               w-[100px] h-[100px] max-[768px]:w-12 max-[768px]:h-12
+               rounded-full border-none bg-transparent bg-no-repeat bg-center bg-contain
+               z-[120] cursor-pointer shadow-lg hover:scale-105 transition-transform"
                 style={{ backgroundImage: "url('./images/each.png')" }}
                 aria-label="Histórico do projeto"
             />
