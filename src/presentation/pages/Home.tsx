@@ -11,7 +11,7 @@ const repository = new MaterialRepositoryImpl();
 const getMaterialsUseCase = new GetMaterialsUseCase(repository);
 const getLinksUseCase = new GetExternalLinksUseCase();
 
-// Lista de ícones (constante, fora do componente)
+// Lista de ícones original mantida intacta
 const topIcons = [
     { id: 'KITS', src: './images/pasta.png', label: 'Kits' },
     { id: 'NEWTON', src: './images/aexestrela.png', label: 'Aexestrela' },
@@ -85,7 +85,10 @@ export const Home = () => {
     const [kits, setKits] = useState<Material[]>([]);
     const links = getLinksUseCase.execute();
     const [embedUrl, setEmbedUrl] = useState<string | null>(null);
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // ✅ estado movido para dentro
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    // Estado para controlar a navegação do carrossel no centro
+    const [carouselIndex, setCarouselIndex] = useState(0);
 
     useEffect(() => {
         getMaterialsUseCase.executeKits().then(setKits);
@@ -106,9 +109,32 @@ export const Home = () => {
         }
     };
 
+    // Funções para girar o carrossel principal (1 grande, 3 menores)
+    const nextSlide = () => {
+        setCarouselIndex((prev) => (prev + 1) % topIcons.length);
+    };
+
+    const prevSlide = () => {
+        setCarouselIndex((prev) => (prev - 1 + topIcons.length) % topIcons.length);
+    };
+
+    // Pega os 4 ícones que devem ser mostrados agora na tela
+    const getVisibleIcons = () => {
+        const icons = [];
+        for (let i = 0; i < 4; i++) {
+            icons.push(topIcons[(carouselIndex + i) % topIcons.length]);
+        }
+        return icons;
+    };
+
+    const visibleIcons = getVisibleIcons();
+    const mainIcon = visibleIcons[0]; // O 1º é o grande
+    const subIcons = visibleIcons.slice(1); // Os 3 seguintes são os menores
+
     return (
         <div className="min-h-screen flex flex-col relative overflow-x-hidden font-sans">
-            {/* HEADER */}
+
+            {/* HEADER (100% INTACTO COMO PEDIDO) */}
             <header className="w-full p-4 z-20">
                 {/* Desktop */}
                 <div className="hidden md:grid grid-cols-3 items-center">
@@ -123,7 +149,7 @@ export const Home = () => {
                         />
                     </div>
 
-                    {/* Centro: barra de ícones */}
+                    {/* Centro: barra de ícones original */}
                     <div className="justify-self-center">
                         <div className="flex bg-banca-escuro/40 backdrop-blur-md p-2 rounded-2xl border border-white/10 shadow-2xl gap-1">
                             {topIcons.map((icon) => (
@@ -142,7 +168,7 @@ export const Home = () => {
                     <div></div>
                 </div>
 
-                {/* Mobile (mantém o layout anterior) */}
+                {/* Mobile */}
                 <div className="md:hidden flex justify-between items-center gap-2">
                     <button
                         onClick={() => openModal('HISTORICO')}
@@ -160,6 +186,7 @@ export const Home = () => {
                     </button>
                 </div>
             </header>
+
             {/* Modal menu mobile */}
             {mobileMenuOpen && (
                 <div
@@ -172,7 +199,7 @@ export const Home = () => {
                     >
                         {topIcons.map((icon) => (
                             <button
-                                key={icon.id}
+                                key={`mob-${icon.id}`}
                                 onClick={() => {
                                     handleTopIconClick(icon.id);
                                     setMobileMenuOpen(false);
@@ -187,17 +214,75 @@ export const Home = () => {
                 </div>
             )}
 
-            {/* MAIN */}
-            <main className="flex-grow flex flex-col items-center justify-center">
-                <h1 className="text-5xl md:text-7xl font-extrabold text-white drop-shadow-lg mb-12 italic">Banca da Ciência</h1>
-                <button onClick={() => openModal('KITS')} className="hover:scale-105 transition-all">
-                    <img src="./images/pasta.png" alt="Pasta" className="w-48 md:w-72 drop-shadow-2xl" />
-                </button>
+            {/* MAIN - CARROSSEL COM 1 MAIOR E 3 MENORES */}
+            <main className="flex-grow flex flex-col items-center justify-center w-full px-4 mb-16">
+                <h1 className="text-5xl md:text-7xl font-extrabold text-white drop-shadow-lg mb-8 italic text-center">Banca da Ciência</h1>
+
+                <div className="relative w-full max-w-4xl flex items-center justify-between">
+
+                    {/* Seta Esquerda */}
+                    <button
+                        onClick={prevSlide}
+                        className="z-10 bg-banca-escuro/80 hover:bg-banca-escuro text-white w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-xl border border-white/20 text-2xl flex-shrink-0"
+                        aria-label="Anterior"
+                    >
+                        &#10094;
+                    </button>
+
+                    {/* Conteúdo do Carrossel */}
+                    <div className="flex-1 flex flex-col items-center gap-8 mx-4">
+
+                        {/* ÍCONE PRINCIPAL (MAIOR) */}
+                        <button
+                            onClick={() => handleTopIconClick(mainIcon.id)}
+                            className="flex flex-col items-center gap-4 hover:scale-105 transition-transform duration-300 group"
+                        >
+                            <img
+                                src={mainIcon.src}
+                                alt={mainIcon.label}
+                                className="w-48 h-48 md:w-64 md:h-64 object-contain drop-shadow-2xl group-hover:drop-shadow-[0_20px_30px_rgba(255,255,255,0.3)] transition-all"
+                            />
+                            <span className="text-white text-xl md:text-2xl font-bold bg-banca-escuro/80 px-8 py-2 rounded-full backdrop-blur-sm shadow-lg">
+                                {mainIcon.label}
+                            </span>
+                        </button>
+
+                        {/* ÍCONES SECUNDÁRIOS (3 MENORES) */}
+                        <div className="flex gap-6 md:gap-12 justify-center mt-4">
+                            {subIcons.map((icon) => (
+                                <button
+                                    key={`sub-${icon.id}`}
+                                    onClick={() => handleTopIconClick(icon.id)}
+                                    className="flex flex-col items-center gap-2 hover:scale-110 transition-transform duration-300 group opacity-80 hover:opacity-100"
+                                >
+                                    <img
+                                        src={icon.src}
+                                        alt={icon.label}
+                                        className="w-20 h-20 md:w-28 md:h-28 object-contain drop-shadow-xl"
+                                    />
+                                    <span className="text-white text-xs md:text-sm font-medium bg-banca-escuro/60 px-4 py-1 rounded-full backdrop-blur-sm">
+                                        {icon.label}
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+
+                    </div>
+
+                    {/* Seta Direita */}
+                    <button
+                        onClick={nextSlide}
+                        className="z-10 bg-banca-escuro/80 hover:bg-banca-escuro text-white w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-xl border border-white/20 text-2xl flex-shrink-0"
+                        aria-label="Próximo"
+                    >
+                        &#10095;
+                    </button>
+                </div>
             </main>
 
             <Footer />
 
-            {/* MODAIS (mantidos iguais ao original) */}
+            {/* MODAIS (MANTIDOS INTACTOS) */}
             {activeModal === 'KITS' && (
                 <div className="fixed inset-0 bg-banca-escuro/90 z-50 flex items-center justify-center p-4 backdrop-blur-md">
                     <div className="bg-white p-8 rounded-3xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative">
