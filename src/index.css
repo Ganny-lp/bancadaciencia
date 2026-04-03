@@ -1,33 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@layer base {
-    html, body, #root {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        min-height: 100vh;
+@media (max-width: 768px) {
+    #btnEachOfficial {
+        width: 70px;
+        height: 70px;
+        top: 10px;
+        left: 10px;
     }
-
+}
+@layer base {
     body {
-        /* Fundo reserva caso a imagem demore a carregar */
-        background-color: #0c3d7a;
-
-        /* Imagem de fundo – caminho absoluto a partir da pasta public */
         background-image: url('./images/banca.png');
-
-        /* Cobertura total e centralizada */
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
         background-attachment: fixed;
-
-        color: white;
-        position: relative;
     }
 
-    /* Overlay escuro para melhor contraste do texto */
+    /* Camada de azul por cima da imagem para dar profundidade */
     body::before {
         content: "";
         position: fixed;
@@ -35,18 +26,36 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(12, 61, 122, 0.7); /* mesma cor do fundo, com transparência */
+        background: rgba(12, 61, 122, 0.7); /* banca-escuro transparente */
         z-index: -1;
-        pointer-events: none;
     }
-}
+}@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* Ajuste para o botão each em telas pequenas (opcional) */
-@media (max-width: 768px) {
-    #btnEachOfficial {
-        width: 70px;
-        height: 70px;
-        top: 10px;
-        left: 10px;
+@layer base {
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background-color: #0c3d7a; /* Cor reserva */
+        background-image: url("/images/banca.png"); /* Certifique-se que o ficheiro está em public/images/banca.png */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        color: white;
+    }
+
+    /* Camada de azul por cima da imagem para dar profundidade */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(12, 61, 122, 0.7); /* banca-escuro transparente */
+        z-index: -1;
     }
 }
