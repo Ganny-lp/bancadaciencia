@@ -96,7 +96,13 @@ export const Home = () => {
 
     return (
         <div className="min-h-screen flex flex-col relative overflow-x-hidden font-sans">
-
+            <button
+                id="btnEachOfficial"
+                onClick={() => openModal('HISTORICO')}
+                className="fixed top-5 left-5 w-[100px] h-[100px] rounded-full border-none bg-transparent bg-no-repeat bg-center bg-contain z-[120] cursor-pointer shadow-lg hover:scale-105 transition-transform"
+                style={{ backgroundImage: "url('./images/each.png')" }}
+                aria-label="Histórico do projeto"
+            />
             {/* ÍCONES DO TOPO */}
             <header className="w-full p-4 flex justify-center items-center z-20">
                 <div className="flex bg-banca-escuro/40 backdrop-blur-md p-2 rounded-2xl border border-white/10 shadow-2xl overflow-x-auto no-scrollbar">
@@ -163,6 +169,7 @@ export const Home = () => {
                 </div>
             )}
             {/* MODAL FOTON (Genially + Frame de Apoio) */}
+
             {/* MODAL FOTON - Versão Final Limpa */}
             {activeModal === 'FOTON' && (
                 <div className="fixed inset-0 bg-banca-escuro/95 z-[100] flex items-center justify-center p-4 backdrop-blur-md">
@@ -204,6 +211,65 @@ export const Home = () => {
                 <span className="text-[10px] text-gray-400 font-mono tracking-[0.2em] uppercase">
                     Banca da Ciência • Laboratório Aberto
                 </span>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {activeModal === 'ASTRO' && (
+                <div
+                    className="fixed inset-0 bg-black z-[102] flex items-center justify-center"
+                    onClick={closeModal}
+                >
+                    <img
+                        src="./images/astro.png"
+                        alt="Astro"
+                        className="max-w-full max-h-full object-contain"
+                    />
+                    <button
+                        onClick={closeModal}
+                        className="absolute top-4 right-4 bg-black/50 text-white text-3xl rounded-full w-10 h-10 flex items-center justify-center hover:bg-black/70"
+                    >
+                        &times;
+                    </button>
+                </div>
+            )}
+            {activeModal === 'HISTORICO' && (
+                <div className="fixed inset-0 bg-banca-escuro/70 z-[199] flex items-center justify-center p-4">
+                    <div className="relative w-full max-w-[700px] bg-white rounded-xl p-8 max-h-[80vh] overflow-y-auto shadow-xl">
+                        <button
+                            onClick={closeModal}
+                            className="absolute top-4 right-4 text-3xl text-gray-500 hover:text-gray-700"
+                        >
+                            &times;
+                        </button>
+                        <div className="text-banca-escuro">
+                            <h2 className="text-2xl font-bold mb-4">Histórico</h2>
+                            <p className="mb-4 leading-relaxed">
+                                O projeto Banca da Ciência da Escola de Artes, Ciências e Humanidades da Universidade de São Paulo (EACH-USP)
+                                surgiu em meados de 2010, de alguns professores universitários, como o docente Luís Paulo de Carvalho Piassi,
+                                inspirados por uma iniciativa de bibliotecas móveis que iam até as comunidades afastadas, a fim de incentivar
+                                a leitura entre os moradores. Ele tem o objetivo de apresentar conceitos científicos de uma forma lúdica para
+                                estudantes do Ensino Fundamental e para todos os interessados por ciências.
+                            </p>
+                            <h3 className="text-lg font-semibold mt-4 mb-2">Temas abordados</h3>
+                            <p>Experimentos de baixo custo, com explicações didáticas e propagação da ciência.</p>
+                            <h3 className="text-lg font-semibold mt-4 mb-2">Público Alvo</h3>
+                            <p>Todos os públicos, contudo principalmente e mais frequentemente voltado ao público infantojuvenil.</p>
+                            <h3 className="text-lg font-semibold mt-4 mb-2">Apresentações</h3>
+                            <p>São realizadas em escolas e na EACH-USP, a partir de solicitações.</p>
+                            <h3 className="text-lg font-semibold mt-4 mb-2">Formas de entrar em contato</h3>
+                            <p>
+                                <strong>E-mail:</strong>{' '}
+                                <button
+                                    onClick={() => openModal('ASTRO')}
+                                    className="text-blue-600 underline hover:text-blue-800"
+                                >
+                                    bancadacienciausp@gmail.com
+                                </button>
+                            </p>
+                            <p><strong>Celular (Monitora Chelsee):</strong> +55 11 99602-2662</p>
+                            <p><strong>Celular (Monitora Samara):</strong> +55 11 97107-2398</p>
+                            <p><strong>Celular (Monitor Lukas):</strong> +55 11 96131-1112</p>
                         </div>
                     </div>
                 </div>

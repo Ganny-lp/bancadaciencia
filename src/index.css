@@ -1,7 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@media (max-width: 768px) {
+    #btnEachOfficial {
+        width: 70px;
+        height: 70px;
+        top: 10px;
+        left: 10px;
+    }
+}
 @layer base {
     body {
         margin: 0;

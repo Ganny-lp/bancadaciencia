@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 // Adicionamos os outros IDs que os ícones do topo usam para não dar erro
 // Adicione todos os IDs que usamos no Home.tsx aqui:
-type ModalType = 'NONE' | 'KITS' | 'SUBPROJETOS' | 'SUBPROJETO_INFO' | 'DRIVE_VIEWER' | 'NEWTON' | 'FOLDER' | 'TEACHER' | 'CHICKEN' | 'EYE' | 'TELESCOPE' | 'BULB' | 'SNORKEL' | 'FOTON' | 'PRESSAO'| 'YODA' | 'HISTORICO';
+type ModalType = 'NONE' | 'ASTRO'| 'KITS' | 'SUBPROJETOS' | 'SUBPROJETO_INFO' | 'DRIVE_VIEWER' | 'NEWTON' | 'FOLDER' | 'TEACHER' | 'CHICKEN' | 'EYE' | 'TELESCOPE' | 'BULB' | 'SNORKEL' | 'FOTON' | 'PRESSAO'| 'YODA' | 'HISTORICO';
 interface ModalContextData {
     activeModal: ModalType;
     payload: string | null;
