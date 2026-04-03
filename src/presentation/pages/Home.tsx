@@ -6,7 +6,6 @@ import { Footer } from '../components/Footer';
 import { MaterialRepositoryImpl } from '../../infrastructure/repositories/MaterialRepositoryImpl';
 import { GetMaterialsUseCase } from '../../domain/usecases/GetMaterialsUseCase';
 import { GetExternalLinksUseCase } from '../../domain/usecases/GetExternalLinksUseCase';
-import {TopIconsBar} from "../components/TopIconsBar.tsx";
 
 const repository = new MaterialRepositoryImpl();
 const getMaterialsUseCase = new GetMaterialsUseCase(repository);
@@ -111,9 +110,40 @@ export const Home = () => {
                 aria-label="Histórico do projeto"
             />
             {/* ÍCONES DO TOPO */}
-            <header className="w-full p-4 flex justify-center items-center z-20">
-                <div className="w-full max-w-[calc(100%-80px)] md:max-w-none flex justify-center">
-                    <TopIconsBar onIconClick={handleTopIconClick} />
+            <header className="w-full p-4 flex justify-between items-center gap-2 z-20">
+                {/* Botão Each (histórico) */}
+                <button
+                    id="btnEachOfficial"
+                    onClick={() => openModal('HISTORICO')}
+                    className="w-12 h-12 md:w-[100px] md:h-[100px] rounded-full border-none bg-transparent bg-no-repeat bg-center bg-contain flex-shrink-0 cursor-pointer shadow-lg hover:scale-105 transition-transform"
+                    style={{ backgroundImage: "url('./images/each.png')" }}
+                    aria-label="Histórico do projeto"
+                />
+
+                {/* Barra de ícones (com scroll horizontal em mobile) */}
+                <div className="flex-1 overflow-x-auto no-scrollbar">
+                    <div className="flex bg-banca-escuro/40 backdrop-blur-md p-2 rounded-2xl border border-white/10 shadow-2xl gap-1 min-w-max">
+                        {[
+                            { id: 'KITS', src: './images/pasta.png' },
+                            { id: 'NEWTON', src: './images/aexestrela.png' },
+                            { id: 'FOLDER', src: './images/planos.png' },
+                            { id: 'TEACHER', src: './images/fazenda.png' },
+                            { id: 'CHICKEN', src: './images/alimentos.png' },
+                            { id: 'EYE', src: './images/olho.png' },
+                            { id: 'TELESCOPE', src: './images/telescopio.png' },
+                            { id: 'BULB', src: './images/foton.png' },
+                            { id: 'SNORKEL', src: './images/pressao.png' },
+                            { id: 'YODA', src: './images/yoda.png' },
+                        ].map((icon) => (
+                            <button
+                                key={icon.id}
+                                onClick={() => handleTopIconClick(icon.id)}
+                                className="flex-shrink-0 w-12 h-12 md:w-16 md:h-16 p-2 hover:bg-banca-medio/50 rounded-xl transition-all hover:scale-110"
+                            >
+                                <img src={icon.src} className="w-full h-full object-contain filter drop-shadow-md" alt={icon.id} />
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </header>
             <main className="flex-grow flex flex-col items-center justify-center">

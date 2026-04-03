@@ -86,10 +86,10 @@ export const Footer = () => {
                         <div
                             className="absolute pointer-events-none transition-opacity duration-300 z-40"
                             style={{
-                                bottom: 'calc(100% - 0.75rem)', // mais próximo: antes 100% + margin-bottom
+                                bottom: 'calc(100% - 0.25rem)', // quase encostado
                                 left: '50%',
                                 transform: 'translateX(-50%)',
-                                width: 'clamp(180px, 45vw, 300px)',
+                                width: 'clamp(160px, 40vw, 260px)',
                             }}
                         >
                             <img
