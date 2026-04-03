@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useModal } from '../contexts/ModalContext';
 import { Material } from '../../domain/entities/Material';
@@ -86,12 +85,26 @@ export const Home = () => {
     const links = getLinksUseCase.execute();
     const [embedUrl, setEmbedUrl] = useState<string | null>(null);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
     const [carouselIndex, setCarouselIndex] = useState(0);
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [animatingIconId, setAnimatingIconId] = useState<string | null>(null);
 
     useEffect(() => {
         getMaterialsUseCase.executeKits().then(setKits);
     }, []);
+
+    // Bloqueia scroll do body quando qualquer modal está aberto
+    useEffect(() => {
+        if (activeModal || embedUrl) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [activeModal, embedUrl]);
 
     const handleTopIconClick = (id: string) => {
         switch (id) {
@@ -108,8 +121,33 @@ export const Home = () => {
         }
     };
 
-    const nextSlide = () => setCarouselIndex((prev) => (prev + 1) % topIcons.length);
-    const prevSlide = () => setCarouselIndex((prev) => (prev - 1 + topIcons.length) % topIcons.length);
+    const handleCloseModal = () => {
+        setIsFullscreen(false);
+        closeModal();
+    };
+
+    const handleCloseEmbed = () => {
+        setIsFullscreen(false);
+        setEmbedUrl(null);
+    };
+
+    const handleCarouselChange = (direction: 'next' | 'prev') => {
+        if (isAnimating) return;
+        setIsAnimating(true);
+
+        let newIndex = direction === 'next'
+            ? (carouselIndex + 1) % topIcons.length
+            : (carouselIndex - 1 + topIcons.length) % topIcons.length;
+
+        const newMainIcon = topIcons[newIndex];
+        setAnimatingIconId(newMainIcon.id);
+        setCarouselIndex(newIndex);
+
+        setTimeout(() => {
+            setAnimatingIconId(null);
+            setIsAnimating(false);
+        }, 300);
+    };
 
     const getVisibleIcons = () => {
         const icons = [];
@@ -123,10 +161,24 @@ export const Home = () => {
     const mainIcon = visibleIcons[0];
     const subIcons = visibleIcons.slice(1);
 
+    const modalContainerClass = isFullscreen
+        ? "w-full h-full flex flex-col relative overflow-hidden"
+        : "bg-white rounded-2xl sm:rounded-3xl max-w-6xl w-full h-[95dvh] sm:h-[90dvh] flex flex-col relative overflow-hidden shadow-2xl";
+
     return (
         <div className="min-h-screen flex flex-col relative overflow-x-hidden font-sans">
-            
-            {/* HEADER INTACTO */}
+            <style>{`
+                @keyframes subtlePop {
+                    0% { transform: scale(1); opacity: 1; }
+                    50% { transform: scale(1.05); opacity: 0.9; }
+                    100% { transform: scale(1); opacity: 1; }
+                }
+                .animate-subtle {
+                    animation: subtlePop 0.2s ease-in-out;
+                }
+            `}</style>
+
+            {/* HEADER */}
             <header className="w-full p-4 z-20">
                 <div className="hidden md:grid grid-cols-3 items-center">
                     <div className="justify-self-start">
@@ -186,51 +238,45 @@ export const Home = () => {
                 </div>
             )}
 
-            {/* MAIN - CARROSSEL (Fundo Removido, mas Setas Integradas) */}
+            {/* MAIN - CARROSSEL COM ANIMAÇÃO */}
             <main className="flex-grow flex flex-col items-center justify-center w-full px-2 sm:px-4 mb-8 sm:mb-16">
                 <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white drop-shadow-lg mb-6 sm:mb-10 italic text-center">Banca da Ciência</h1>
-                
+
                 <div className="flex items-center justify-center gap-4 sm:gap-8 w-full max-w-4xl px-2">
-                    
-                    {/* Seta Esquerda */}
                     <button
-                        onClick={prevSlide}
+                        onClick={() => handleCarouselChange('prev')}
                         className="z-10 bg-banca-escuro/80 hover:bg-banca-escuro text-white w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-xl border border-white/20 text-lg sm:text-2xl flex-shrink-0 hover:scale-110"
                         aria-label="Anterior"
                     >
                         &#10094;
                     </button>
 
-                    {/* Miolo Fixo - Garante que as setas não pulem, mas sem fundo de bloco */}
                     <div className="flex flex-col items-center gap-6 sm:gap-8 w-[240px] sm:w-[380px] md:w-[480px]">
-                        
-                        {/* ÍCONE PRINCIPAL (MAIOR) */}
-                        <button 
-                            onClick={() => handleTopIconClick(mainIcon.id)} 
-                            className="flex flex-col items-center gap-3 sm:gap-4 hover:scale-105 transition-transform duration-300 group"
+                        <button
+                            onClick={() => handleTopIconClick(mainIcon.id)}
+                            className={`flex flex-col items-center gap-3 sm:gap-4 hover:scale-105 transition-transform duration-300 group ${animatingIconId === mainIcon.id ? 'animate-rotate' : ''}`}
                         >
-                            <img 
-                                src={mainIcon.src} 
-                                alt={mainIcon.label} 
-                                className="w-32 h-32 sm:w-52 sm:h-52 md:w-64 md:h-64 object-contain drop-shadow-2xl group-hover:drop-shadow-[0_20px_30px_rgba(255,255,255,0.3)] transition-all" 
+                            <img
+                                src={mainIcon.src}
+                                alt={mainIcon.label}
+                                className="w-32 h-32 sm:w-52 sm:h-52 md:w-64 md:h-64 object-contain drop-shadow-2xl group-hover:drop-shadow-[0_20px_30px_rgba(255,255,255,0.3)] transition-all"
                             />
                             <span className="text-white text-sm sm:text-xl md:text-2xl font-bold bg-banca-escuro/80 px-6 sm:px-8 py-1.5 sm:py-2 rounded-full backdrop-blur-sm shadow-lg whitespace-nowrap">
                                 {mainIcon.label}
                             </span>
                         </button>
 
-                        {/* ÍCONES SECUNDÁRIOS (3 MENORES) */}
                         <div className="flex gap-2 sm:gap-6 md:gap-8 justify-center w-full">
                             {subIcons.map((icon) => (
-                                <button 
-                                    key={`sub-${icon.id}`} 
-                                    onClick={() => handleTopIconClick(icon.id)} 
-                                    className="flex flex-col items-center gap-1.5 sm:gap-2 hover:scale-110 transition-transform duration-300 group opacity-80 hover:opacity-100 flex-1"
+                                <button
+                                    key={`sub-${icon.id}`}
+                                    onClick={() => handleTopIconClick(icon.id)}
+                                    className={`flex flex-col items-center gap-1.5 sm:gap-2 hover:scale-110 transition-transform duration-300 group opacity-80 hover:opacity-100 flex-1 ${animatingIconId === icon.id ? 'animate-sub' : ''}`}
                                 >
-                                    <img 
-                                        src={icon.src} 
-                                        alt={icon.label} 
-                                        className="w-14 h-14 sm:w-20 sm:h-20 md:w-24 md:h-24 object-contain drop-shadow-xl" 
+                                    <img
+                                        src={icon.src}
+                                        alt={icon.label}
+                                        className="w-14 h-14 sm:w-20 sm:h-20 md:w-24 md:h-24 object-contain drop-shadow-xl"
                                     />
                                     <span className="text-white text-[10px] sm:text-xs md:text-sm font-medium bg-banca-escuro/60 px-2 sm:px-4 py-0.5 sm:py-1 rounded-full backdrop-blur-sm whitespace-nowrap overflow-hidden text-ellipsis max-w-full">
                                         {icon.label}
@@ -240,9 +286,8 @@ export const Home = () => {
                         </div>
                     </div>
 
-                    {/* Seta Direita */}
                     <button
-                        onClick={nextSlide}
+                        onClick={() => handleCarouselChange('next')}
                         className="z-10 bg-banca-escuro/80 hover:bg-banca-escuro text-white w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-xl border border-white/20 text-lg sm:text-2xl flex-shrink-0 hover:scale-110"
                         aria-label="Próximo"
                     >
@@ -253,11 +298,11 @@ export const Home = () => {
 
             <Footer />
 
-            {/* MODAIS (MANTIDOS DA CORREÇÃO ANTERIOR) */}
+            {/* MODAIS CORRIGIDOS (sem scroll no fullscreen) */}
             {activeModal === 'KITS' && (
                 <div className="fixed inset-0 bg-banca-escuro/90 z-50 flex items-center justify-center p-4 backdrop-blur-md">
                     <div className="bg-white p-6 sm:p-8 rounded-3xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative">
-                        <button onClick={closeModal} className="absolute top-4 right-6 text-4xl text-gray-400 hover:text-gray-600">&times;</button>
+                        <button onClick={handleCloseModal} className="absolute top-4 right-6 text-4xl text-gray-400 hover:text-gray-600">&times;</button>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6 mt-6 sm:mt-0">
                             {kits.map(kit => (
                                 <button key={kit.id} onClick={() => openModal('DRIVE_VIEWER', kit.id)} className="flex flex-col items-center group">
@@ -273,9 +318,9 @@ export const Home = () => {
             )}
 
             {activeModal === 'SUBPROJETOS' && (
-                <div className="fixed inset-0 bg-banca-escuro/90 z-50 flex items-center justify-center p-4" onClick={closeModal}>
+                <div className="fixed inset-0 bg-banca-escuro/90 z-50 flex items-center justify-center p-4" onClick={handleCloseModal}>
                     <div className="bg-white p-6 sm:p-8 rounded-3xl max-w-4xl w-full relative" onClick={e => e.stopPropagation()}>
-                        <button onClick={closeModal} className="absolute top-4 right-6 text-4xl text-gray-400 hover:text-gray-600">&times;</button>
+                        <button onClick={handleCloseModal} className="absolute top-4 right-6 text-4xl text-gray-400 hover:text-gray-600">&times;</button>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mt-6 sm:mt-0">
                             {Object.keys(subprojetosData).map(sub => (
                                 <button key={sub} onClick={() => openModal('SUBPROJETO_INFO', sub)} className="p-4 sm:p-6 bg-gray-100 rounded-2xl font-black text-xs sm:text-base text-banca-escuro hover:bg-banca-claro hover:text-white transition-all">
@@ -287,47 +332,69 @@ export const Home = () => {
                 </div>
             )}
 
-            {/* Fóton */}
+            {/* FÓTON - Modal corrigido */}
             {activeModal === 'FOTON' && (
-                <div className="fixed inset-0 bg-banca-escuro/95 z-[100] flex items-center justify-center p-2 sm:p-4 backdrop-blur-md">
-                    <div className="bg-white rounded-2xl sm:rounded-3xl max-w-6xl w-full h-[95vh] sm:h-[90vh] flex flex-col relative overflow-hidden shadow-2xl">
-                        <div className="flex justify-end p-2 sm:p-4 bg-blue-50 border-b-4 border-banca-claro absolute top-0 left-0 right-0 z-10 pointer-events-none">
-                            <button onClick={closeModal} className="text-3xl sm:text-4xl text-gray-500 hover:text-red-600 transition-colors pointer-events-auto bg-white/50 rounded-full w-10 h-10 flex items-center justify-center">&times;</button>
+                <div className={`fixed inset-0 bg-banca-escuro/95 z-[100] flex items-center justify-center transition-all ${isFullscreen ? 'p-0' : 'p-2 sm:p-4'} backdrop-blur-md`}>
+                    <div className={`bg-white flex flex-col relative overflow-hidden shadow-2xl ${isFullscreen ? 'w-full h-full' : 'rounded-2xl sm:rounded-3xl max-w-6xl w-full h-[95dvh] sm:h-[90dvh]'}`}>
+                        <div className="flex justify-end gap-2 p-2 sm:p-4 absolute top-0 left-0 right-0 z-50 pointer-events-none">
+                            <button
+                                onClick={() => setIsFullscreen(!isFullscreen)}
+                                className="pointer-events-auto bg-blue-600/90 hover:bg-blue-800 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition-colors"
+                                title={isFullscreen ? "Sair da Tela Cheia" : "Tela Cheia"}
+                            >
+                                {isFullscreen ? (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 0a.5.5 0 0 1 .5.5v4A1.5 1.5 0 0 1 4.5 6h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5zm5 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 10 4.5v-4a.5.5 0 0 1 .5-.5zM0 10.5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 6 11.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zm10 1a1.5 1.5 0 0 1 1.5-1.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4z"/></svg>
+                                ) : (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path fillRule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.707l4.096-4.096a.5.5 0 0 0 0-.707zm4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.793l-4.096-4.096a.5.5 0 0 1 0-.707zm0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.793l-4.096 4.096a.5.5 0 0 0 0 .707zm-4.344 0a.5.5 0 0 1-.707 0L1.025 1.707V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.707l4.096 4.096a.5.5 0 0 1 0 .707z"/></svg>
+                                )}
+                            </button>
+                            <button onClick={handleCloseModal} className="pointer-events-auto bg-white/60 hover:bg-red-600 hover:text-white text-gray-700 rounded-full w-10 h-10 flex items-center justify-center text-2xl shadow-lg transition-colors">&times;</button>
                         </div>
-                        
-                        <div className="p-4 sm:p-8 bg-blue-50 border-b-4 border-banca-claro pt-14 sm:pt-16">
-                            <div className="flex gap-3 sm:gap-4 items-start max-w-4xl mx-auto">
-                                <div className="bg-banca-claro p-2 rounded-lg text-white shadow-md flex-shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="sm:w-6 sm:h-6"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+
+                        {!isFullscreen && (
+                            <div className="shrink-0 p-4 sm:p-8 bg-blue-50 border-b-4 border-banca-claro pt-14 sm:pt-16">
+                                <div className="flex gap-3 sm:gap-4 items-start max-w-4xl mx-auto">
+                                    <div className="bg-banca-claro p-2 rounded-lg text-white shadow-md flex-shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="sm:w-6 sm:h-6"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                    </div>
+                                    <p className="text-[#0c3d7a] text-xs sm:text-base md:text-lg leading-relaxed font-medium">
+                                        Esta atividade interativa apresenta um <strong>storytelling envolvente sobre óptica</strong>.
+                                        Ao explorar a história, você resolverá questões de óptica e coletará senhas que aparecerão
+                                        para iluminar o núcleo fotônico, revelando os segredos da luz e da visão.
+                                    </p>
                                 </div>
-                                <p className="text-[#0c3d7a] text-xs sm:text-base md:text-lg leading-relaxed font-medium">
-                                    Esta atividade interativa apresenta um <strong>storytelling envolvente sobre óptica</strong>.
-                                    Ao explorar a história, você resolverá questões de óptica e coletará senhas que aparecerão
-                                    para iluminar o núcleo fotônico, revelando os segredos da luz e da visão.
-                                </p>
                             </div>
+                        )}
+
+                        <div className="flex-1 w-full min-h-0 relative bg-black">
+                            <iframe
+                                src={links.foton}
+                                className="absolute inset-0 w-full h-full border-none"
+                                title="Conteúdo Atividade Fóton"
+                                allowFullScreen
+                            />
                         </div>
-                        
-                        <iframe src={links.foton} className="w-full flex-grow border-none bg-gray-100" title="Conteúdo Atividade Fóton" />
-                        
-                        <div className="bg-white py-1.5 sm:py-2 text-center border-t">
-                            <span className="text-[8px] sm:text-[10px] text-gray-400 font-mono tracking-[0.2em] uppercase">Banca da Ciência • Laboratório Aberto</span>
-                        </div>
+
+                        {!isFullscreen && (
+                            <div className="shrink-0 bg-white py-1.5 sm:py-2 text-center border-t">
+                                <span className="text-[8px] sm:text-[10px] text-gray-400 font-mono tracking-[0.2em] uppercase">Banca da Ciência • Laboratório Aberto</span>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
 
             {activeModal === 'ASTRO' && (
-                <div className="fixed inset-0 bg-black z-[102] flex items-center justify-center" onClick={closeModal}>
+                <div className="fixed inset-0 bg-black z-[102] flex items-center justify-center" onClick={handleCloseModal}>
                     <img src="./images/astro.png" alt="Astro" className="max-w-full max-h-full object-contain p-4" />
-                    <button onClick={closeModal} className="absolute top-4 right-4 bg-black/50 text-white text-3xl rounded-full w-10 h-10 flex items-center justify-center hover:bg-black/70">&times;</button>
+                    <button onClick={handleCloseModal} className="absolute top-4 right-4 bg-black/50 text-white text-3xl rounded-full w-10 h-10 flex items-center justify-center hover:bg-black/70">&times;</button>
                 </div>
             )}
 
             {activeModal === 'HISTORICO' && (
                 <div className="fixed inset-0 bg-banca-escuro/70 z-[199] flex items-center justify-center p-4">
                     <div className="relative w-full max-w-[700px] bg-white rounded-xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto shadow-xl">
-                        <button onClick={closeModal} className="absolute top-2 right-4 text-3xl text-gray-500 hover:text-gray-700">&times;</button>
+                        <button onClick={handleCloseModal} className="absolute top-2 right-4 text-3xl text-gray-500 hover:text-gray-700">&times;</button>
                         <div className="text-banca-escuro mt-4 sm:mt-0 text-sm sm:text-base">
                             <h2 className="text-xl sm:text-2xl font-bold mb-4">Histórico</h2>
                             <p className="mb-4 leading-relaxed">O projeto Banca da Ciência da Escola de Artes, Ciências e Humanidades da Universidade de São Paulo (EACH-USP) surgiu em meados de 2010...</p>
@@ -350,7 +417,7 @@ export const Home = () => {
             {activeModal === 'PRESSAO' && (
                 <div className="fixed inset-0 bg-banca-escuro/95 z-[100] flex items-center justify-center p-2 sm:p-4 backdrop-blur-md">
                     <div className="bg-[#e1f0ff] p-4 sm:p-8 rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[95vh] overflow-y-auto relative text-banca-escuro">
-                        <button onClick={closeModal} className="absolute top-2 right-4 sm:top-4 sm:right-6 text-3xl sm:text-4xl text-blue-900">&times;</button>
+                        <button onClick={handleCloseModal} className="absolute top-2 right-4 sm:top-4 sm:right-6 text-3xl sm:text-4xl text-blue-900">&times;</button>
                         <div className="grid md:grid-cols-2 gap-6 sm:gap-8 mt-6 sm:mt-0">
                             <div className="flex flex-col items-center w-full">
                                 <h2 className="text-xl sm:text-2xl font-black mb-4 uppercase text-center w-full">Simulador de Pressão</h2>
@@ -370,14 +437,23 @@ export const Home = () => {
                 </div>
             )}
 
+            {/* YODA - Modal corrigido */}
             {activeModal === 'YODA' && (
-                <div className="fixed inset-0 bg-black/80 z-[200] flex items-center justify-center p-2 sm:p-4">
-                    <div className="bg-white rounded-xl sm:rounded-2xl w-full max-w-7xl h-[95vh] sm:h-[90vh] relative flex flex-col">
-                        <div className="absolute top-2 right-2 flex gap-2 z-10">
-                            <button onClick={() => window.open(links.yoda, '_blank')} className="bg-banca-escuro text-white px-3 py-1.5 rounded text-xs">Nova Aba</button>
-                            <button onClick={closeModal} className="bg-red-600 text-white px-3 py-1.5 rounded text-xs">Fechar</button>
+                <div className={`fixed inset-0 bg-black/90 z-[200] flex items-center justify-center ${isFullscreen ? 'p-0' : 'p-2 sm:p-4'}`} onClick={handleCloseModal}>
+                    <div className={`bg-black flex flex-col relative overflow-hidden ${isFullscreen ? 'w-full h-full' : 'rounded-2xl sm:rounded-3xl max-w-6xl w-full h-[95dvh] sm:h-[90dvh] shadow-2xl'}`} onClick={e => e.stopPropagation()}>
+                        <div className="absolute top-2 right-2 flex gap-2 z-50 pointer-events-none">
+                            <button
+                                onClick={() => setIsFullscreen(!isFullscreen)}
+                                className="pointer-events-auto bg-blue-600/90 hover:bg-blue-800 text-white px-3 py-1.5 rounded text-xs shadow-md"
+                            >
+                                {isFullscreen ? 'Reduzir' : 'Tela Cheia'}
+                            </button>
+                            <button onClick={() => window.open(links.yoda, '_blank')} className="pointer-events-auto bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-xs shadow-md">Nova Aba</button>
+                            <button onClick={handleCloseModal} className="pointer-events-auto bg-red-600/90 hover:bg-red-800 text-white px-3 py-1.5 rounded text-xs shadow-md">Fechar</button>
                         </div>
-                        <iframe src={links.yoda} title="Simulador Jedi Archive" className="w-full flex-grow rounded-xl sm:rounded-2xl border-none" allow="fullscreen" />
+                        <div className="flex-1 w-full min-h-0 relative">
+                            <iframe src={links.yoda} title="Simulador Jedi Archive" className="absolute inset-0 w-full h-full border-none" allowFullScreen />
+                        </div>
                     </div>
                 </div>
             )}
@@ -392,20 +468,29 @@ export const Home = () => {
                 </div>
             )}
 
+            {/* Embed Genérico - Modal corrigido */}
             {embedUrl && (
-                <div className="fixed inset-0 bg-black/80 z-[200] flex items-center justify-center p-2 sm:p-4" onClick={() => setEmbedUrl(null)}>
-                    <div className="bg-white rounded-xl sm:rounded-2xl w-full max-w-6xl h-[95vh] sm:h-[85vh] relative flex flex-col" onClick={e => e.stopPropagation()}>
-                        <div className="absolute top-2 right-2 flex gap-2 z-10">
-                            <button onClick={() => window.open(embedUrl, '_blank')} className="bg-banca-escuro text-white px-3 py-1.5 rounded text-xs shadow-md">Nova Aba</button>
-                            <button onClick={() => setEmbedUrl(null)} className="bg-red-600 text-white px-3 py-1.5 rounded text-xs shadow-md">Fechar</button>
+                <div className={`fixed inset-0 bg-black/90 z-[200] flex items-center justify-center ${isFullscreen ? 'p-0' : 'p-2 sm:p-4'}`} onClick={handleCloseEmbed}>
+                    <div className={`bg-black flex flex-col relative overflow-hidden ${isFullscreen ? 'w-full h-full' : 'rounded-2xl sm:rounded-3xl max-w-6xl w-full h-[95dvh] sm:h-[90dvh] shadow-2xl'}`} onClick={e => e.stopPropagation()}>
+                        <div className="absolute top-2 right-2 flex gap-2 z-50 pointer-events-none">
+                            <button
+                                onClick={() => setIsFullscreen(!isFullscreen)}
+                                className="pointer-events-auto bg-blue-600/90 hover:bg-blue-800 text-white px-3 py-1.5 rounded text-xs shadow-md"
+                            >
+                                {isFullscreen ? 'Reduzir' : 'Tela Cheia'}
+                            </button>
+                            <button onClick={() => window.open(embedUrl, '_blank')} className="pointer-events-auto bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-xs shadow-md">Nova Aba</button>
+                            <button onClick={handleCloseEmbed} className="pointer-events-auto bg-red-600/90 hover:bg-red-800 text-white px-3 py-1.5 rounded text-xs shadow-md">Fechar</button>
                         </div>
-                        <iframe src={embedUrl} title="Visualização" className="w-full flex-grow rounded-xl sm:rounded-2xl border-none" allowFullScreen />
+                        <div className="flex-1 w-full min-h-0 relative">
+                            <iframe src={embedUrl} title="Visualização" className="absolute inset-0 w-full h-full border-none" allowFullScreen />
+                        </div>
                     </div>
                 </div>
             )}
 
             {activeModal === 'DRIVE_VIEWER' && payload && (
-                <InternalDriveViewer fileId={payload} onClose={closeModal} />
+                <InternalDriveViewer fileId={payload} onClose={handleCloseModal} />
             )}
         </div>
     );

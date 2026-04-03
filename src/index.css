@@ -1,6 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@keyframes subtlePop {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.9; }
+    100% { transform: scale(1); opacity: 1; }
+}
+.animate-subtle {
+    animation: subtlePop 0.2s ease-in-out;
+}
 @media (max-width: 768px) {
     #btnEachOfficial {
         width: 70px;
