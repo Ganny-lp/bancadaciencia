@@ -109,42 +109,57 @@ export const Home = () => {
     return (
         <div className="min-h-screen flex flex-col relative overflow-x-hidden font-sans">
             {/* HEADER */}
-            <header className="w-full p-4 flex justify-between items-center gap-2 z-20">
-                {/* Botão Each (histórico) */}
-                <button
-                    id="btnEachOfficial"
-                    onClick={() => openModal('HISTORICO')}
-                    className="w-12 h-12 md:w-[100px] md:h-[100px] rounded-full border-none bg-transparent bg-no-repeat bg-center bg-contain flex-shrink-0 cursor-pointer shadow-lg hover:scale-105 transition-transform"
-                    style={{ backgroundImage: "url('./images/each.png')" }}
-                    aria-label="Histórico do projeto"
-                />
-
-                {/* Desktop: barra de ícones horizontal */}
-                <div className="hidden md:flex flex-1 overflow-x-auto no-scrollbar">
-                    <div className="flex bg-banca-escuro/40 backdrop-blur-md p-2 rounded-2xl border border-white/10 shadow-2xl gap-1">
-                        {topIcons.map((icon) => (
-                            <button
-                                key={icon.id}
-                                onClick={() => handleTopIconClick(icon.id)}
-                                className="flex-shrink-0 w-16 h-16 p-2 hover:bg-banca-medio/50 rounded-xl transition-all hover:scale-110"
-                            >
-                                <img src={icon.src} className="w-full h-full object-contain filter drop-shadow-md" alt={icon.id} />
-                            </button>
-                        ))}
+            <header className="w-full p-4 z-20">
+                {/* Desktop */}
+                <div className="hidden md:grid grid-cols-3 items-center">
+                    {/* Esquerda: botão Each */}
+                    <div className="justify-self-start">
+                        <button
+                            id="btnEachOfficial"
+                            onClick={() => openModal('HISTORICO')}
+                            className="w-[100px] h-[100px] rounded-full border-none bg-transparent bg-no-repeat bg-center bg-contain cursor-pointer shadow-lg hover:scale-105 transition-transform"
+                            style={{ backgroundImage: "url('./images/each.png')" }}
+                            aria-label="Histórico do projeto"
+                        />
                     </div>
+
+                    {/* Centro: barra de ícones */}
+                    <div className="justify-self-center">
+                        <div className="flex bg-banca-escuro/40 backdrop-blur-md p-2 rounded-2xl border border-white/10 shadow-2xl gap-1">
+                            {topIcons.map((icon) => (
+                                <button
+                                    key={icon.id}
+                                    onClick={() => handleTopIconClick(icon.id)}
+                                    className="flex-shrink-0 w-16 h-16 p-2 hover:bg-banca-medio/50 rounded-xl transition-all hover:scale-110"
+                                >
+                                    <img src={icon.src} className="w-full h-full object-contain filter drop-shadow-md" alt={icon.id} />
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Direita: vazio (para equilibrar) */}
+                    <div></div>
                 </div>
 
-                {/* Mobile: botão sanduíche */}
-                <button
-                    className="md:hidden w-10 h-10 flex flex-col justify-center items-center gap-1.5 bg-banca-escuro/40 backdrop-blur-sm rounded-lg p-2"
-                    onClick={() => setMobileMenuOpen(true)}
-                >
-                    <span className="w-5 h-0.5 bg-white"></span>
-                    <span className="w-5 h-0.5 bg-white"></span>
-                    <span className="w-5 h-0.5 bg-white"></span>
-                </button>
+                {/* Mobile (mantém o layout anterior) */}
+                <div className="md:hidden flex justify-between items-center gap-2">
+                    <button
+                        onClick={() => openModal('HISTORICO')}
+                        className="w-12 h-12 rounded-full border-none bg-transparent bg-no-repeat bg-center bg-contain flex-shrink-0 cursor-pointer shadow-lg"
+                        style={{ backgroundImage: "url('./images/each.png')" }}
+                        aria-label="Histórico do projeto"
+                    />
+                    <button
+                        className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 bg-banca-escuro/40 backdrop-blur-sm rounded-lg p-2"
+                        onClick={() => setMobileMenuOpen(true)}
+                    >
+                        <span className="w-5 h-0.5 bg-white"></span>
+                        <span className="w-5 h-0.5 bg-white"></span>
+                        <span className="w-5 h-0.5 bg-white"></span>
+                    </button>
+                </div>
             </header>
-
             {/* Modal menu mobile */}
             {mobileMenuOpen && (
                 <div
