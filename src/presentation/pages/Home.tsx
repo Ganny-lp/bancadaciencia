@@ -10,9 +10,8 @@ import { GetExternalLinksUseCase } from '../../domain/usecases/GetExternalLinksU
 const repository = new MaterialRepositoryImpl();
 const getMaterialsUseCase = new GetMaterialsUseCase(repository);
 const getLinksUseCase = new GetExternalLinksUseCase();
-const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-// Lista de ícones (pode ser extraída para constante fora do componente)
+// Lista de ícones (constante, fora do componente)
 const topIcons = [
     { id: 'KITS', src: './images/pasta.png', label: 'Kits' },
     { id: 'NEWTON', src: './images/aexestrela.png', label: 'Aexestrela' },
@@ -25,6 +24,7 @@ const topIcons = [
     { id: 'SNORKEL', src: './images/pressao.png', label: 'Pressão' },
     { id: 'YODA', src: './images/yoda.png', label: 'Yoda' },
 ];
+
 const subprojetosData: Record<string, React.ReactNode> = {
     OUMOU: (
         <>
@@ -84,13 +84,12 @@ export const Home = () => {
     const { activeModal, payload, openModal, closeModal } = useModal();
     const [kits, setKits] = useState<Material[]>([]);
     const links = getLinksUseCase.execute();
-
     const [embedUrl, setEmbedUrl] = useState<string | null>(null);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // ✅ estado movido para dentro
 
     useEffect(() => {
         getMaterialsUseCase.executeKits().then(setKits);
     }, []);
-
 
     const handleTopIconClick = (id: string) => {
         switch (id) {
@@ -100,7 +99,6 @@ export const Home = () => {
             case 'CHICKEN': setEmbedUrl(links.alimentos); break;
             case 'EYE': setEmbedUrl(links.onda); break;
             case 'TELESCOPE': setEmbedUrl(links.telescopio); break;
-            // Estes IDs abrem modais internos com a lógica legada
             case 'BULB': openModal('FOTON'); break;
             case 'SNORKEL': openModal('PRESSAO'); break;
             case 'YODA': openModal('YODA'); break;
@@ -110,7 +108,7 @@ export const Home = () => {
 
     return (
         <div className="min-h-screen flex flex-col relative overflow-x-hidden font-sans">
-            {/* ÍCONES DO TOPO */}
+            {/* HEADER */}
             <header className="w-full p-4 flex justify-between items-center gap-2 z-20">
                 {/* Botão Each (histórico) */}
                 <button
@@ -172,16 +170,19 @@ export const Home = () => {
                         ))}
                     </div>
                 </div>
-            )}            <main className="flex-grow flex flex-col items-center justify-center">
+            )}
+
+            {/* MAIN */}
+            <main className="flex-grow flex flex-col items-center justify-center">
                 <h1 className="text-5xl md:text-7xl font-extrabold text-white drop-shadow-lg mb-12 italic">Banca da Ciência</h1>
                 <button onClick={() => openModal('KITS')} className="hover:scale-105 transition-all">
-                    <img src="./images/pasta.png" alt="Pasta" className="w-48 md:w-72 drop-shadow-2xl" />                </button>
+                    <img src="./images/pasta.png" alt="Pasta" className="w-48 md:w-72 drop-shadow-2xl" />
+                </button>
             </main>
-
 
             <Footer />
 
-            {/* MODAL KITS */}
+            {/* MODAIS (mantidos iguais ao original) */}
             {activeModal === 'KITS' && (
                 <div className="fixed inset-0 bg-banca-escuro/90 z-50 flex items-center justify-center p-4 backdrop-blur-md">
                     <div className="bg-white p-8 rounded-3xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative">
@@ -200,7 +201,6 @@ export const Home = () => {
                 </div>
             )}
 
-            {/* MODAL LISTA DE SUBPROJETOS */}
             {activeModal === 'SUBPROJETOS' && (
                 <div className="fixed inset-0 bg-banca-escuro/90 z-50 flex items-center justify-center p-4" onClick={closeModal}>
                     <div className="bg-white p-8 rounded-3xl max-w-4xl w-full relative" onClick={e => e.stopPropagation()}>
@@ -215,22 +215,11 @@ export const Home = () => {
                     </div>
                 </div>
             )}
-            {/* MODAL FOTON (Genially + Frame de Apoio) */}
 
-            {/* MODAL FOTON - Versão Final Limpa */}
             {activeModal === 'FOTON' && (
                 <div className="fixed inset-0 bg-banca-escuro/95 z-[100] flex items-center justify-center p-4 backdrop-blur-md">
                     <div className="bg-white rounded-3xl max-w-6xl w-full h-[90vh] flex flex-col relative overflow-hidden shadow-2xl">
-
-                        {/* BOTÃO FECHAR */}
-                        <button
-                            onClick={closeModal}
-                            className="absolute top-4 right-6 text-4xl text-gray-400 hover:text-red-500 z-50 transition-colors"
-                        >
-                            &times;
-                        </button>
-
-                        {/* 1. TEXTO INTRODUTÓRIO (Topo Fixo) */}
+                        <button onClick={closeModal} className="absolute top-4 right-6 text-4xl text-gray-400 hover:text-red-500 z-50 transition-colors">&times;</button>
                         <div className="p-8 bg-blue-50 border-b-4 border-banca-claro">
                             <div className="flex gap-4 items-start max-w-4xl mx-auto">
                                 <div className="bg-banca-claro p-2 rounded-lg text-white shadow-md">
@@ -243,61 +232,30 @@ export const Home = () => {
                                 </p>
                             </div>
                         </div>
-
-                        {/* 2. REPOSITÓRIO GITHUB (Ocupa todo o resto) */}
                         <div className="flex-grow w-full overflow-y-auto">
-                            <iframe
-                                src={links.foton}
-                                className="w-full h-full min-h-[1000px] border-none"
-                                title="Conteúdo Atividade Fóton"
-                            />
+                            <iframe src={links.foton} className="w-full h-full min-h-[1000px] border-none" title="Conteúdo Atividade Fóton" />
                         </div>
-
-                        {/* RODAPÉ SUTIL */}
                         <div className="bg-gray-100 py-2 text-center border-t">
-                <span className="text-[10px] text-gray-400 font-mono tracking-[0.2em] uppercase">
-                    Banca da Ciência • Laboratório Aberto
-                </span>
+                            <span className="text-[10px] text-gray-400 font-mono tracking-[0.2em] uppercase">Banca da Ciência • Laboratório Aberto</span>
                         </div>
                     </div>
                 </div>
             )}
+
             {activeModal === 'ASTRO' && (
-                <div
-                    className="fixed inset-0 bg-black z-[102] flex items-center justify-center"
-                    onClick={closeModal}
-                >
-                    <img
-                        src="./images/astro.png"
-                        alt="Astro"
-                        className="max-w-full max-h-full object-contain"
-                    />
-                    <button
-                        onClick={closeModal}
-                        className="absolute top-4 right-4 bg-black/50 text-white text-3xl rounded-full w-10 h-10 flex items-center justify-center hover:bg-black/70"
-                    >
-                        &times;
-                    </button>
+                <div className="fixed inset-0 bg-black z-[102] flex items-center justify-center" onClick={closeModal}>
+                    <img src="./images/astro.png" alt="Astro" className="max-w-full max-h-full object-contain" />
+                    <button onClick={closeModal} className="absolute top-4 right-4 bg-black/50 text-white text-3xl rounded-full w-10 h-10 flex items-center justify-center hover:bg-black/70">&times;</button>
                 </div>
             )}
+
             {activeModal === 'HISTORICO' && (
                 <div className="fixed inset-0 bg-banca-escuro/70 z-[199] flex items-center justify-center p-4">
                     <div className="relative w-full max-w-[700px] bg-white rounded-xl p-8 max-h-[80vh] overflow-y-auto shadow-xl">
-                        <button
-                            onClick={closeModal}
-                            className="absolute top-4 right-4 text-3xl text-gray-500 hover:text-gray-700"
-                        >
-                            &times;
-                        </button>
+                        <button onClick={closeModal} className="absolute top-4 right-4 text-3xl text-gray-500 hover:text-gray-700">&times;</button>
                         <div className="text-banca-escuro">
                             <h2 className="text-2xl font-bold mb-4">Histórico</h2>
-                            <p className="mb-4 leading-relaxed">
-                                O projeto Banca da Ciência da Escola de Artes, Ciências e Humanidades da Universidade de São Paulo (EACH-USP)
-                                surgiu em meados de 2010, de alguns professores universitários, como o docente Luís Paulo de Carvalho Piassi,
-                                inspirados por uma iniciativa de bibliotecas móveis que iam até as comunidades afastadas, a fim de incentivar
-                                a leitura entre os moradores. Ele tem o objetivo de apresentar conceitos científicos de uma forma lúdica para
-                                estudantes do Ensino Fundamental e para todos os interessados por ciências.
-                            </p>
+                            <p className="mb-4 leading-relaxed">O projeto Banca da Ciência da Escola de Artes, Ciências e Humanidades da Universidade de São Paulo (EACH-USP) surgiu em meados de 2010, de alguns professores universitários, como o docente Luís Paulo de Carvalho Piassi, inspirados por uma iniciativa de bibliotecas móveis que iam até as comunidades afastadas, a fim de incentivar a leitura entre os moradores. Ele tem o objetivo de apresentar conceitos científicos de uma forma lúdica para estudantes do Ensino Fundamental e para todos os interessados por ciências.</p>
                             <h3 className="text-lg font-semibold mt-4 mb-2">Temas abordados</h3>
                             <p>Experimentos de baixo custo, com explicações didáticas e propagação da ciência.</p>
                             <h3 className="text-lg font-semibold mt-4 mb-2">Público Alvo</h3>
@@ -305,15 +263,7 @@ export const Home = () => {
                             <h3 className="text-lg font-semibold mt-4 mb-2">Apresentações</h3>
                             <p>São realizadas em escolas e na EACH-USP, a partir de solicitações.</p>
                             <h3 className="text-lg font-semibold mt-4 mb-2">Formas de entrar em contato</h3>
-                            <p>
-                                <strong>E-mail:</strong>{' '}
-                                <button
-                                    onClick={() => openModal('ASTRO')}
-                                    className="text-blue-600 underline hover:text-blue-800"
-                                >
-                                    bancadacienciausp@gmail.com
-                                </button>
-                            </p>
+                            <p><strong>E-mail:</strong> <button onClick={() => openModal('ASTRO')} className="text-blue-600 underline hover:text-blue-800">bancadacienciausp@gmail.com</button></p>
                             <p><strong>Celular (Monitora Chelsee):</strong> +55 11 99602-2662</p>
                             <p><strong>Celular (Monitora Samara):</strong> +55 11 97107-2398</p>
                             <p><strong>Celular (Monitor Lukas):</strong> +55 11 96131-1112</p>
@@ -322,37 +272,22 @@ export const Home = () => {
                 </div>
             )}
 
-            {/* MODAL PRESSÃO (Scratch + Quiz Legado) */}
             {activeModal === 'PRESSAO' && (
                 <div className="fixed inset-0 bg-banca-escuro/95 z-[100] flex items-center justify-center p-4 backdrop-blur-md">
                     <div className="bg-[#e1f0ff] p-8 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative text-banca-escuro">
                         <button onClick={closeModal} className="absolute top-4 right-6 text-4xl text-blue-900">&times;</button>
-
                         <div className="grid md:grid-cols-2 gap-8">
                             <div>
                                 <h2 className="text-2xl font-black mb-4 uppercase">Simulador de Pressão</h2>
-                                <iframe
-                                    src="https://scratch.mit.edu/projects/1239452553/embed"
-                                    width="485" height="402"
-                                    className="rounded-xl shadow-lg w-full"
-                                />
+                                <iframe src="https://scratch.mit.edu/projects/1239452553/embed" width="485" height="402" className="rounded-xl shadow-lg w-full" />
                             </div>
-
                             <div className="space-y-4">
                                 <h3 className="font-bold border-b border-blue-300 pb-2">Desafio de Física</h3>
                                 <p className="text-sm">Sabendo que a cada 10m de profundidade a pressão aumenta 1 atm, responda:</p>
                                 <div className="bg-white p-4 rounded-xl shadow-inner">
                                     <p className="text-sm font-semibold">Qual a pressão total a 10m de profundidade?</p>
                                     <input type="number" id="ex-pressao" className="w-full mt-2 p-2 border rounded" placeholder="Resposta em atm..." />
-                                    <button
-                                        onClick={() => {
-                                            const val = (document.getElementById('ex-pressao') as HTMLInputElement).value;
-                                            alert(val === "2" ? "Correto! 1 atm (ar) + 1 atm (água)" : "Tente novamente!");
-                                        }}
-                                        className="mt-2 bg-blue-600 text-white px-4 py-1 rounded text-sm hover:bg-blue-700"
-                                    >
-                                        Verificar
-                                    </button>
+                                    <button onClick={() => { const val = (document.getElementById('ex-pressao') as HTMLInputElement).value; alert(val === "2" ? "Correto! 1 atm (ar) + 1 atm (água)" : "Tente novamente!"); }} className="mt-2 bg-blue-600 text-white px-4 py-1 rounded text-sm hover:bg-blue-700">Verificar</button>
                                 </div>
                             </div>
                         </div>
@@ -360,47 +295,28 @@ export const Home = () => {
                 </div>
             )}
 
-            {/* MODAL YODA (Simulador Jedi Archive) */}
             {activeModal === 'YODA' && (
                 <div className="fixed inset-0 bg-black/80 z-[200] flex items-center justify-center p-4">
                     <div className="bg-white rounded-2xl w-full max-w-7xl h-[90vh] relative">
                         <div className="absolute top-2 right-2 flex gap-2 z-10">
-                            <button
-                                onClick={() => window.open(links.yoda, '_blank')}
-                                className="bg-banca-escuro text-white p-2 rounded text-xs"
-                            >
-                                Nova Aba
-                            </button>
-                            <button
-                                onClick={closeModal}
-                                className="bg-red-600 text-white p-2 rounded text-xs"
-                            >
-                                Fechar
-                            </button>
+                            <button onClick={() => window.open(links.yoda, '_blank')} className="bg-banca-escuro text-white p-2 rounded text-xs">Nova Aba</button>
+                            <button onClick={closeModal} className="bg-red-600 text-white p-2 rounded text-xs">Fechar</button>
                         </div>
-                        <iframe
-                            src={links.yoda}
-                            title="Simulador Jedi Archive"
-                            className="w-full h-full rounded-2xl"
-                            allow="fullscreen"
-                        />
+                        <iframe src={links.yoda} title="Simulador Jedi Archive" className="w-full h-full rounded-2xl" allow="fullscreen" />
                     </div>
                 </div>
             )}
-            {/* MODAL DETALHES DO SUBPROJETO */}
+
             {activeModal === 'SUBPROJETO_INFO' && payload && (
                 <div className="fixed inset-0 bg-banca-escuro/95 z-[60] flex items-center justify-center p-4" onClick={() => openModal('SUBPROJETOS')}>
                     <div className="bg-[#032a4c] text-[#e1f0ff] p-8 rounded-3xl max-w-2xl w-full relative" onClick={e => e.stopPropagation()}>
                         <button onClick={() => openModal('SUBPROJETOS')} className="absolute top-4 right-6 text-4xl text-blue-300">&times;</button>
                         <h2 className="text-3xl font-black mb-6 border-b border-blue-800 pb-2">{payload}</h2>
-                        <div className="overflow-y-auto max-h-[60vh] pr-2">
-                            {subprojetosData[payload]}
-                        </div>
+                        <div className="overflow-y-auto max-h-[60vh] pr-2">{subprojetosData[payload]}</div>
                     </div>
                 </div>
             )}
 
-            {/* MODAL IFRAMES EXTERNOS */}
             {embedUrl && (
                 <div className="fixed inset-0 bg-black/80 z-[200] flex items-center justify-center p-4" onClick={() => setEmbedUrl(null)}>
                     <div className="bg-white rounded-2xl w-full max-w-6xl h-[85vh] relative" onClick={e => e.stopPropagation()}>
