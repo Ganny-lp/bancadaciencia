@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useModal } from '../contexts/ModalContext';
 import { Material } from '../../domain/entities/Material';
@@ -86,25 +87,12 @@ export const Home = () => {
     const [embedUrl, setEmbedUrl] = useState<string | null>(null);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [carouselIndex, setCarouselIndex] = useState(0);
+
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const [isAnimating, setIsAnimating] = useState(false);
-    const [animatingIconId, setAnimatingIconId] = useState<string | null>(null);
 
     useEffect(() => {
         getMaterialsUseCase.executeKits().then(setKits);
     }, []);
-
-    // Bloqueia scroll do body quando qualquer modal está aberto
-    useEffect(() => {
-        if (activeModal || embedUrl) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-        return () => {
-            document.body.style.overflow = '';
-        };
-    }, [activeModal, embedUrl]);
 
     const handleTopIconClick = (id: string) => {
         switch (id) {
@@ -131,23 +119,8 @@ export const Home = () => {
         setEmbedUrl(null);
     };
 
-    const handleCarouselChange = (direction: 'next' | 'prev') => {
-        if (isAnimating) return;
-        setIsAnimating(true);
-
-        let newIndex = direction === 'next'
-            ? (carouselIndex + 1) % topIcons.length
-            : (carouselIndex - 1 + topIcons.length) % topIcons.length;
-
-        const newMainIcon = topIcons[newIndex];
-        setAnimatingIconId(newMainIcon.id);
-        setCarouselIndex(newIndex);
-
-        setTimeout(() => {
-            setAnimatingIconId(null);
-            setIsAnimating(false);
-        }, 300);
-    };
+    const nextSlide = () => setCarouselIndex((prev) => (prev + 1) % topIcons.length);
+    const prevSlide = () => setCarouselIndex((prev) => (prev - 1 + topIcons.length) % topIcons.length);
 
     const getVisibleIcons = () => {
         const icons = [];
@@ -161,23 +134,14 @@ export const Home = () => {
     const mainIcon = visibleIcons[0];
     const subIcons = visibleIcons.slice(1);
 
-    const modalContainerClass = isFullscreen
-        ? "w-full h-full flex flex-col relative overflow-hidden"
+    // Substituição do vh por dvh (Dynamic Viewport Height) resolve os problemas com as barras do mobile
+    const modalContainerClass = isFullscreen 
+        ? "bg-white w-screen h-[100dvh] flex flex-col relative overflow-hidden" 
         : "bg-white rounded-2xl sm:rounded-3xl max-w-6xl w-full h-[95dvh] sm:h-[90dvh] flex flex-col relative overflow-hidden shadow-2xl";
 
     return (
         <div className="min-h-screen flex flex-col relative overflow-x-hidden font-sans">
-            <style>{`
-                @keyframes subtlePop {
-                    0% { transform: scale(1); opacity: 1; }
-                    50% { transform: scale(1.05); opacity: 0.9; }
-                    100% { transform: scale(1); opacity: 1; }
-                }
-                .animate-subtle {
-                    animation: subtlePop 0.2s ease-in-out;
-                }
-            `}</style>
-
+            
             {/* HEADER */}
             <header className="w-full p-4 z-20">
                 <div className="hidden md:grid grid-cols-3 items-center">
@@ -238,13 +202,14 @@ export const Home = () => {
                 </div>
             )}
 
-            {/* MAIN - CARROSSEL COM ANIMAÇÃO */}
+            {/* MAIN - CARROSSEL */}
             <main className="flex-grow flex flex-col items-center justify-center w-full px-2 sm:px-4 mb-8 sm:mb-16">
                 <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white drop-shadow-lg mb-6 sm:mb-10 italic text-center">Banca da Ciência</h1>
-
+                
                 <div className="flex items-center justify-center gap-4 sm:gap-8 w-full max-w-4xl px-2">
+                    
                     <button
-                        onClick={() => handleCarouselChange('prev')}
+                        onClick={prevSlide}
                         className="z-10 bg-banca-escuro/80 hover:bg-banca-escuro text-white w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-xl border border-white/20 text-lg sm:text-2xl flex-shrink-0 hover:scale-110"
                         aria-label="Anterior"
                     >
@@ -252,14 +217,15 @@ export const Home = () => {
                     </button>
 
                     <div className="flex flex-col items-center gap-6 sm:gap-8 w-[240px] sm:w-[380px] md:w-[480px]">
-                        <button
-                            onClick={() => handleTopIconClick(mainIcon.id)}
-                            className={`flex flex-col items-center gap-3 sm:gap-4 hover:scale-105 transition-transform duration-300 group ${animatingIconId === mainIcon.id ? 'animate-rotate' : ''}`}
+                        
+                        <button 
+                            onClick={() => handleTopIconClick(mainIcon.id)} 
+                            className="flex flex-col items-center gap-3 sm:gap-4 hover:scale-105 transition-transform duration-300 group"
                         >
-                            <img
-                                src={mainIcon.src}
-                                alt={mainIcon.label}
-                                className="w-32 h-32 sm:w-52 sm:h-52 md:w-64 md:h-64 object-contain drop-shadow-2xl group-hover:drop-shadow-[0_20px_30px_rgba(255,255,255,0.3)] transition-all"
+                            <img 
+                                src={mainIcon.src} 
+                                alt={mainIcon.label} 
+                                className="w-32 h-32 sm:w-52 sm:h-52 md:w-64 md:h-64 object-contain drop-shadow-2xl group-hover:drop-shadow-[0_20px_30px_rgba(255,255,255,0.3)] transition-all" 
                             />
                             <span className="text-white text-sm sm:text-xl md:text-2xl font-bold bg-banca-escuro/80 px-6 sm:px-8 py-1.5 sm:py-2 rounded-full backdrop-blur-sm shadow-lg whitespace-nowrap">
                                 {mainIcon.label}
@@ -268,15 +234,15 @@ export const Home = () => {
 
                         <div className="flex gap-2 sm:gap-6 md:gap-8 justify-center w-full">
                             {subIcons.map((icon) => (
-                                <button
-                                    key={`sub-${icon.id}`}
-                                    onClick={() => handleTopIconClick(icon.id)}
-                                    className={`flex flex-col items-center gap-1.5 sm:gap-2 hover:scale-110 transition-transform duration-300 group opacity-80 hover:opacity-100 flex-1 ${animatingIconId === icon.id ? 'animate-sub' : ''}`}
+                                <button 
+                                    key={`sub-${icon.id}`} 
+                                    onClick={() => handleTopIconClick(icon.id)} 
+                                    className="flex flex-col items-center gap-1.5 sm:gap-2 hover:scale-110 transition-transform duration-300 group opacity-80 hover:opacity-100 flex-1"
                                 >
-                                    <img
-                                        src={icon.src}
-                                        alt={icon.label}
-                                        className="w-14 h-14 sm:w-20 sm:h-20 md:w-24 md:h-24 object-contain drop-shadow-xl"
+                                    <img 
+                                        src={icon.src} 
+                                        alt={icon.label} 
+                                        className="w-14 h-14 sm:w-20 sm:h-20 md:w-24 md:h-24 object-contain drop-shadow-xl" 
                                     />
                                     <span className="text-white text-[10px] sm:text-xs md:text-sm font-medium bg-banca-escuro/60 px-2 sm:px-4 py-0.5 sm:py-1 rounded-full backdrop-blur-sm whitespace-nowrap overflow-hidden text-ellipsis max-w-full">
                                         {icon.label}
@@ -287,7 +253,7 @@ export const Home = () => {
                     </div>
 
                     <button
-                        onClick={() => handleCarouselChange('next')}
+                        onClick={nextSlide}
                         className="z-10 bg-banca-escuro/80 hover:bg-banca-escuro text-white w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-xl border border-white/20 text-lg sm:text-2xl flex-shrink-0 hover:scale-110"
                         aria-label="Próximo"
                     >
@@ -298,7 +264,7 @@ export const Home = () => {
 
             <Footer />
 
-            {/* MODAIS CORRIGIDOS (sem scroll no fullscreen) */}
+            {/* MODAIS */}
             {activeModal === 'KITS' && (
                 <div className="fixed inset-0 bg-banca-escuro/90 z-50 flex items-center justify-center p-4 backdrop-blur-md">
                     <div className="bg-white p-6 sm:p-8 rounded-3xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative">
@@ -332,13 +298,13 @@ export const Home = () => {
                 </div>
             )}
 
-            {/* FÓTON - Modal corrigido */}
+            {/* Fóton - Sem Scroll */}
             {activeModal === 'FOTON' && (
-                <div className={`fixed inset-0 bg-banca-escuro/95 z-[100] flex items-center justify-center transition-all ${isFullscreen ? 'p-0' : 'p-2 sm:p-4'} backdrop-blur-md`}>
-                    <div className={`bg-white flex flex-col relative overflow-hidden shadow-2xl ${isFullscreen ? 'w-full h-full' : 'rounded-2xl sm:rounded-3xl max-w-6xl w-full h-[95dvh] sm:h-[90dvh]'}`}>
+                <div className={`fixed inset-0 bg-banca-escuro/95 z-[100] flex items-center justify-center ${isFullscreen ? '' : 'p-2 sm:p-4'} backdrop-blur-md`}>
+                    <div className={modalContainerClass}>
                         <div className="flex justify-end gap-2 p-2 sm:p-4 absolute top-0 left-0 right-0 z-50 pointer-events-none">
-                            <button
-                                onClick={() => setIsFullscreen(!isFullscreen)}
+                            <button 
+                                onClick={() => setIsFullscreen(!isFullscreen)} 
                                 className="pointer-events-auto bg-blue-600/90 hover:bg-blue-800 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition-colors"
                                 title={isFullscreen ? "Sair da Tela Cheia" : "Tela Cheia"}
                             >
@@ -350,7 +316,7 @@ export const Home = () => {
                             </button>
                             <button onClick={handleCloseModal} className="pointer-events-auto bg-white/60 hover:bg-red-600 hover:text-white text-gray-700 rounded-full w-10 h-10 flex items-center justify-center text-2xl shadow-lg transition-colors">&times;</button>
                         </div>
-
+                        
                         {!isFullscreen && (
                             <div className="shrink-0 p-4 sm:p-8 bg-blue-50 border-b-4 border-banca-claro pt-14 sm:pt-16">
                                 <div className="flex gap-3 sm:gap-4 items-start max-w-4xl mx-auto">
@@ -365,16 +331,21 @@ export const Home = () => {
                                 </div>
                             </div>
                         )}
-
+                        
+                        {/* O Segredo está aqui:
+                            flex-1 (ocupa o resto do espaço) 
+                            min-h-0 (impede que o conteudo de dentro force a altura p/ fora do flex)
+                            relative (para o iframe absolute preencher 100% de forma exata)
+                        */}
                         <div className="flex-1 w-full min-h-0 relative bg-black">
-                            <iframe
-                                src={links.foton}
-                                className="absolute inset-0 w-full h-full border-none"
-                                title="Conteúdo Atividade Fóton"
+                            <iframe 
+                                src={links.foton} 
+                                className="absolute inset-0 w-full h-full border-none" 
+                                title="Conteúdo Atividade Fóton" 
                                 allowFullScreen
                             />
                         </div>
-
+                        
                         {!isFullscreen && (
                             <div className="shrink-0 bg-white py-1.5 sm:py-2 text-center border-t">
                                 <span className="text-[8px] sm:text-[10px] text-gray-400 font-mono tracking-[0.2em] uppercase">Banca da Ciência • Laboratório Aberto</span>
@@ -437,13 +408,13 @@ export const Home = () => {
                 </div>
             )}
 
-            {/* YODA - Modal corrigido */}
+            {/* Yoda - Sem Scroll */}
             {activeModal === 'YODA' && (
-                <div className={`fixed inset-0 bg-black/90 z-[200] flex items-center justify-center ${isFullscreen ? 'p-0' : 'p-2 sm:p-4'}`} onClick={handleCloseModal}>
-                    <div className={`bg-black flex flex-col relative overflow-hidden ${isFullscreen ? 'w-full h-full' : 'rounded-2xl sm:rounded-3xl max-w-6xl w-full h-[95dvh] sm:h-[90dvh] shadow-2xl'}`} onClick={e => e.stopPropagation()}>
+                <div className={`fixed inset-0 bg-black/90 z-[200] flex items-center justify-center ${isFullscreen ? '' : 'p-2 sm:p-4'}`} onClick={handleCloseModal}>
+                    <div className={modalContainerClass.replace('bg-white', 'bg-black')} onClick={e => e.stopPropagation()}>
                         <div className="absolute top-2 right-2 flex gap-2 z-50 pointer-events-none">
-                            <button
-                                onClick={() => setIsFullscreen(!isFullscreen)}
+                            <button 
+                                onClick={() => setIsFullscreen(!isFullscreen)} 
                                 className="pointer-events-auto bg-blue-600/90 hover:bg-blue-800 text-white px-3 py-1.5 rounded text-xs shadow-md"
                             >
                                 {isFullscreen ? 'Reduzir' : 'Tela Cheia'}
@@ -468,13 +439,13 @@ export const Home = () => {
                 </div>
             )}
 
-            {/* Embed Genérico - Modal corrigido */}
+            {/* Embed Genérico - Sem Scroll */}
             {embedUrl && (
-                <div className={`fixed inset-0 bg-black/90 z-[200] flex items-center justify-center ${isFullscreen ? 'p-0' : 'p-2 sm:p-4'}`} onClick={handleCloseEmbed}>
-                    <div className={`bg-black flex flex-col relative overflow-hidden ${isFullscreen ? 'w-full h-full' : 'rounded-2xl sm:rounded-3xl max-w-6xl w-full h-[95dvh] sm:h-[90dvh] shadow-2xl'}`} onClick={e => e.stopPropagation()}>
+                <div className={`fixed inset-0 bg-black/90 z-[200] flex items-center justify-center ${isFullscreen ? '' : 'p-2 sm:p-4'}`} onClick={handleCloseEmbed}>
+                    <div className={modalContainerClass.replace('bg-white', 'bg-black')} onClick={e => e.stopPropagation()}>
                         <div className="absolute top-2 right-2 flex gap-2 z-50 pointer-events-none">
-                            <button
-                                onClick={() => setIsFullscreen(!isFullscreen)}
+                            <button 
+                                onClick={() => setIsFullscreen(!isFullscreen)} 
                                 className="pointer-events-auto bg-blue-600/90 hover:bg-blue-800 text-white px-3 py-1.5 rounded text-xs shadow-md"
                             >
                                 {isFullscreen ? 'Reduzir' : 'Tela Cheia'}
