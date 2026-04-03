@@ -84,17 +84,17 @@ export const Footer = () => {
                     {/* Balão de diálogo - ajustado para ficar mais próximo */}
                     {showDialog && (
                         <div
-                            className="absolute pointer-events-none transition-opacity duration-300 z-40"
+                            className="fixed pointer-events-none transition-opacity duration-300 z-50"
                             style={{
-                                bottom: 'calc(100% - 0.25rem)', // quase encostado
-                                left: '50%',
+                                bottom: '20%',      // distância do fundo – ajuste conforme necessário
+                                left: '25%',        // posição horizontal (25% da largura da tela)
                                 transform: 'translateX(-50%)',
-                                width: 'clamp(160px, 40vw, 260px)',
+                                width: 'clamp(180px, 40vw, 280px)',
                             }}
                         >
                             <img
                                 src={`./images/dialogo${dialogIndex + 1}.png`}
-                                className="w-full h-auto object-contain drop-shadow-lg"
+                                className="w-full h-auto object-contain drop-shadow-2xl"
                                 alt="Diálogo"
                             />
                         </div>

@@ -10,7 +10,21 @@ import { GetExternalLinksUseCase } from '../../domain/usecases/GetExternalLinksU
 const repository = new MaterialRepositoryImpl();
 const getMaterialsUseCase = new GetMaterialsUseCase(repository);
 const getLinksUseCase = new GetExternalLinksUseCase();
+const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+// Lista de ícones (pode ser extraída para constante fora do componente)
+const topIcons = [
+    { id: 'KITS', src: './images/pasta.png', label: 'Kits' },
+    { id: 'NEWTON', src: './images/aexestrela.png', label: 'Aexestrela' },
+    { id: 'FOLDER', src: './images/planos.png', label: 'Planos' },
+    { id: 'TEACHER', src: './images/fazenda.png', label: 'Fazenda' },
+    { id: 'CHICKEN', src: './images/alimentos.png', label: 'Alimentos' },
+    { id: 'EYE', src: './images/olho.png', label: 'Onda' },
+    { id: 'TELESCOPE', src: './images/telescopio.png', label: 'Telescópio' },
+    { id: 'BULB', src: './images/foton.png', label: 'Fóton' },
+    { id: 'SNORKEL', src: './images/pressao.png', label: 'Pressão' },
+    { id: 'YODA', src: './images/yoda.png', label: 'Yoda' },
+];
 const subprojetosData: Record<string, React.ReactNode> = {
     OUMOU: (
         <>
@@ -96,19 +110,6 @@ export const Home = () => {
 
     return (
         <div className="min-h-screen flex flex-col relative overflow-x-hidden font-sans">
-            <button
-                id="btnEachOfficial"
-                onClick={() => openModal('HISTORICO')}
-                className="fixed
-               top-5 left-5
-               max-[768px]:top-20
-               max-[768px]:w-12 max-[768px]:h-12
-               w-[100px] h-[100px]
-               rounded-full border-none bg-transparent bg-no-repeat bg-center bg-contain
-               z-[120] cursor-pointer shadow-lg hover:scale-105 transition-transform"
-                style={{ backgroundImage: "url('./images/each.png')" }}
-                aria-label="Histórico do projeto"
-            />
             {/* ÍCONES DO TOPO */}
             <header className="w-full p-4 flex justify-between items-center gap-2 z-20">
                 {/* Botão Each (histórico) */}
@@ -120,33 +121,58 @@ export const Home = () => {
                     aria-label="Histórico do projeto"
                 />
 
-                {/* Barra de ícones (com scroll horizontal em mobile) */}
-                <div className="flex-1 overflow-x-auto no-scrollbar">
-                    <div className="flex bg-banca-escuro/40 backdrop-blur-md p-2 rounded-2xl border border-white/10 shadow-2xl gap-1 min-w-max">
-                        {[
-                            { id: 'KITS', src: './images/pasta.png' },
-                            { id: 'NEWTON', src: './images/aexestrela.png' },
-                            { id: 'FOLDER', src: './images/planos.png' },
-                            { id: 'TEACHER', src: './images/fazenda.png' },
-                            { id: 'CHICKEN', src: './images/alimentos.png' },
-                            { id: 'EYE', src: './images/olho.png' },
-                            { id: 'TELESCOPE', src: './images/telescopio.png' },
-                            { id: 'BULB', src: './images/foton.png' },
-                            { id: 'SNORKEL', src: './images/pressao.png' },
-                            { id: 'YODA', src: './images/yoda.png' },
-                        ].map((icon) => (
+                {/* Desktop: barra de ícones horizontal */}
+                <div className="hidden md:flex flex-1 overflow-x-auto no-scrollbar">
+                    <div className="flex bg-banca-escuro/40 backdrop-blur-md p-2 rounded-2xl border border-white/10 shadow-2xl gap-1">
+                        {topIcons.map((icon) => (
                             <button
                                 key={icon.id}
                                 onClick={() => handleTopIconClick(icon.id)}
-                                className="flex-shrink-0 w-12 h-12 md:w-16 md:h-16 p-2 hover:bg-banca-medio/50 rounded-xl transition-all hover:scale-110"
+                                className="flex-shrink-0 w-16 h-16 p-2 hover:bg-banca-medio/50 rounded-xl transition-all hover:scale-110"
                             >
                                 <img src={icon.src} className="w-full h-full object-contain filter drop-shadow-md" alt={icon.id} />
                             </button>
                         ))}
                     </div>
                 </div>
+
+                {/* Mobile: botão sanduíche */}
+                <button
+                    className="md:hidden w-10 h-10 flex flex-col justify-center items-center gap-1.5 bg-banca-escuro/40 backdrop-blur-sm rounded-lg p-2"
+                    onClick={() => setMobileMenuOpen(true)}
+                >
+                    <span className="w-5 h-0.5 bg-white"></span>
+                    <span className="w-5 h-0.5 bg-white"></span>
+                    <span className="w-5 h-0.5 bg-white"></span>
+                </button>
             </header>
-            <main className="flex-grow flex flex-col items-center justify-center">
+
+            {/* Modal menu mobile */}
+            {mobileMenuOpen && (
+                <div
+                    className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+                    onClick={() => setMobileMenuOpen(false)}
+                >
+                    <div
+                        className="bg-banca-escuro/95 backdrop-blur-md rounded-2xl w-64 max-h-[80vh] overflow-y-auto p-3 flex flex-col gap-2 border border-white/20"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {topIcons.map((icon) => (
+                            <button
+                                key={icon.id}
+                                onClick={() => {
+                                    handleTopIconClick(icon.id);
+                                    setMobileMenuOpen(false);
+                                }}
+                                className="flex items-center gap-3 p-3 hover:bg-banca-medio/50 rounded-xl transition-all"
+                            >
+                                <img src={icon.src} className="w-8 h-8 object-contain" alt={icon.id} />
+                                <span className="text-white text-sm font-medium">{icon.label}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}            <main className="flex-grow flex flex-col items-center justify-center">
                 <h1 className="text-5xl md:text-7xl font-extrabold text-white drop-shadow-lg mb-12 italic">Banca da Ciência</h1>
                 <button onClick={() => openModal('KITS')} className="hover:scale-105 transition-all">
                     <img src="./images/pasta.png" alt="Pasta" className="w-48 md:w-72 drop-shadow-2xl" />                </button>
