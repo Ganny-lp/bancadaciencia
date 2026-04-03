@@ -93,6 +93,16 @@ export const Home = () => {
     useEffect(() => {
         getMaterialsUseCase.executeKits().then(setKits);
     }, []);
+    useEffect(() => {
+        if (activeModal || embedUrl) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [activeModal, embedUrl]);
 
     const handleTopIconClick = (id: string) => {
         switch (id) {
@@ -101,7 +111,10 @@ export const Home = () => {
             case 'TEACHER': setEmbedUrl(links.fazenda); break;
             case 'CHICKEN': setEmbedUrl(links.alimentos); break;
             case 'EYE': setEmbedUrl(links.onda); break;
-            case 'TELESCOPE': setEmbedUrl(links.telescopio); break;
+            case 'TELESCOPE':
+                setEmbedUrl(links.telescopio);
+                setIsFullscreen(true);  // <-- abre já em tela cheia
+                break;
             case 'BULB': openModal('FOTON'); break;
             case 'SNORKEL': openModal('PRESSAO'); break;
             case 'YODA': openModal('YODA'); break;
@@ -441,20 +454,38 @@ export const Home = () => {
 
             {/* Embed Genérico - Sem Scroll */}
             {embedUrl && (
-                <div className={`fixed inset-0 bg-black/90 z-[200] flex items-center justify-center ${isFullscreen ? '' : 'p-2 sm:p-4'}`} onClick={handleCloseEmbed}>
-                    <div className={modalContainerClass.replace('bg-white', 'bg-black')} onClick={e => e.stopPropagation()}>
+                <div
+                    className={`fixed inset-0 z-[200] flex items-center justify-center transition-all ${isFullscreen ? 'p-0' : 'p-2 sm:p-4'}`}
+                    onClick={handleCloseEmbed}
+                >
+                    <div
+                        className={`bg-black flex flex-col relative overflow-hidden ${isFullscreen ? 'w-full h-full' : 'rounded-2xl sm:rounded-3xl max-w-6xl w-full h-[95dvh] sm:h-[90dvh] shadow-2xl'}`}
+                        onClick={e => e.stopPropagation()}
+                    >
+                        {/* Botões flutuantes */}
                         <div className="absolute top-2 right-2 flex gap-2 z-50 pointer-events-none">
-                            <button 
-                                onClick={() => setIsFullscreen(!isFullscreen)} 
+                            <button
+                                onClick={() => setIsFullscreen(!isFullscreen)}
                                 className="pointer-events-auto bg-blue-600/90 hover:bg-blue-800 text-white px-3 py-1.5 rounded text-xs shadow-md"
                             >
                                 {isFullscreen ? 'Reduzir' : 'Tela Cheia'}
                             </button>
-                            <button onClick={() => window.open(embedUrl, '_blank')} className="pointer-events-auto bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-xs shadow-md">Nova Aba</button>
-                            <button onClick={handleCloseEmbed} className="pointer-events-auto bg-red-600/90 hover:bg-red-800 text-white px-3 py-1.5 rounded text-xs shadow-md">Fechar</button>
+                            <button onClick={() => window.open(embedUrl, '_blank')} className="pointer-events-auto bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-xs shadow-md">
+                                Nova Aba
+                            </button>
+                            <button onClick={handleCloseEmbed} className="pointer-events-auto bg-red-600/90 hover:bg-red-800 text-white px-3 py-1.5 rounded text-xs shadow-md">
+                                Fechar
+                            </button>
                         </div>
+
+                        {/* Iframe ocupando todo o espaço restante */}
                         <div className="flex-1 w-full min-h-0 relative">
-                            <iframe src={embedUrl} title="Visualização" className="absolute inset-0 w-full h-full border-none" allowFullScreen />
+                            <iframe
+                                src={embedUrl}
+                                title="Visualização"
+                                className="absolute inset-0 w-full h-full border-none"
+                                allowFullScreen
+                            />
                         </div>
                     </div>
                 </div>
