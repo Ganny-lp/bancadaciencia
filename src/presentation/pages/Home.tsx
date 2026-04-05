@@ -373,7 +373,7 @@ export const Home = () => {
             {/* Modal KITS */}
             {activeModal === 'KITS' && (
                 <div className="fixed inset-0 bg-banca-escuro/90 z-50 flex items-center justify-center p-4 backdrop-blur-md">
-                    <div className="bg-blue-950 p-6 sm:p-8 rounded-3xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative">
+                    <div className="bg-white p-6 sm:p-8 rounded-3xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative">
                         <button onClick={handleCloseModal} className="absolute top-4 right-6 text-4xl text-gray-400 hover:text-gray-600">&times;</button>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6 mt-6 sm:mt-0">
                             {kits.map(kit => (
@@ -381,8 +381,7 @@ export const Home = () => {
                                     <div className="w-full aspect-square rounded-xl overflow-hidden shadow-md group-hover:border-banca-claro border-4 border-transparent transition-all">
                                         <img src={kit.coverImagePath} className="w-full h-full object-cover" alt={kit.name} />
                                     </div>
-                                    <p className="mt-2 font-bold text-sm sm:text-base text-banca-escuro text-center">{kit.name}</p>
-                                </button>
+                                    <p className="mt-2 font-bold text-sm sm:text-base text-gray-900 text-center">{kit.name}</p>                                </button>
                             ))}
                         </div>
                     </div>
