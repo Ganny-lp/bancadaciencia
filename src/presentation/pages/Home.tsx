@@ -372,16 +372,34 @@ export const Home = () => {
 
             {/* Modal KITS */}
             {activeModal === 'KITS' && (
-                <div className="fixed inset-0 bg-banca-escuro/90 z-50 flex items-center justify-center p-4 backdrop-blur-md">
-                    <div className="bg-white p-6 sm:p-8 rounded-3xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative">
-                        <button onClick={handleCloseModal} className="absolute top-4 right-6 text-4xl text-gray-400 hover:text-gray-600">&times;</button>
+                <div className="fixed inset-0 bg-banca-escuro/90 dark:bg-gray-900/95 z-50 flex items-center justify-center p-4 backdrop-blur-md transition-colors duration-300">
+                    <div className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-3xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl transition-colors duration-300">
+
+                        <button
+                            onClick={handleCloseModal}
+                            className="absolute top-4 right-6 text-4xl text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                        >
+                            &times;
+                        </button>
+
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6 mt-6 sm:mt-0">
                             {kits.map(kit => (
-                                <button key={kit.id} onClick={() => openModal('DRIVE_VIEWER', kit.id)} className="flex flex-col items-center group">
-                                    <div className="w-full aspect-square rounded-xl overflow-hidden shadow-md group-hover:border-banca-claro border-4 border-transparent transition-all">
-                                        <img src={kit.coverImagePath} className="w-full h-full object-cover" alt={kit.name} />
+                                <button
+                                    key={kit.id}
+                                    onClick={() => openModal('DRIVE_VIEWER', kit.id)}
+                                    className="flex flex-col items-center group"
+                                >
+                                    <div className="w-full aspect-square rounded-xl overflow-hidden shadow-md bg-gray-100 dark:bg-gray-700 group-hover:border-banca-claro dark:group-hover:border-blue-400 border-4 border-transparent transition-all duration-300">
+                                        <img
+                                            src={kit.coverImagePath}
+                                            className="w-full h-full object-cover"
+                                            alt={kit.name}
+                                        />
                                     </div>
-                                    <p className="mt-2 font-bold text-sm sm:text-base text-gray-900 text-center">{kit.name}</p>                                </button>
+                                    <p className="mt-2 font-bold text-sm sm:text-base text-gray-900 dark:text-gray-100 text-center transition-colors">
+                                        {kit.name}
+                                    </p>
+                                </button>
                             ))}
                         </div>
                     </div>
@@ -470,6 +488,82 @@ export const Home = () => {
                         </div>
                         <div className="flex-1 w-full min-h-0 relative">
                             <iframe src={embedUrl} title="Visualização" className="absolute inset-0 w-full h-full border-none" allowFullScreen />
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Yoda - Sem Scroll */}
+            {activeModal === 'YODA' && (
+                <div className={`fixed inset-0 bg-black/90 z-[200] flex items-center justify-center ${isFullscreen ? '' : 'p-2 sm:p-4'}`} onClick={handleCloseModal}>
+                    <div className={modalContainerClass.replace('bg-white', 'bg-black')} onClick={e => e.stopPropagation()}>
+                        <div className="absolute top-2 right-2 flex gap-2 z-50 pointer-events-none">
+                            <button
+                                onClick={() => setIsFullscreen(!isFullscreen)}
+                                className="pointer-events-auto bg-blue-600/90 hover:bg-blue-800 text-white px-3 py-1.5 rounded text-xs shadow-md"
+                            >
+                                {isFullscreen ? 'Reduzir' : 'Tela Cheia'}
+                            </button>
+                            <button onClick={() => window.open(links.yoda, '_blank')} className="pointer-events-auto bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-xs shadow-md">Nova Aba</button>
+                            <button onClick={handleCloseModal} className="pointer-events-auto bg-red-600/90 hover:bg-red-800 text-white px-3 py-1.5 rounded text-xs shadow-md">Fechar</button>
+                        </div>
+                        <div className="flex-1 w-full min-h-0 relative">
+                            <iframe src={links.yoda} title="Simulador Jedi Archive" className="absolute inset-0 w-full h-full border-none" allowFullScreen />
+                        </div>
+                    </div>
+                </div>
+            )}
+            {activeModal === 'PRESSAO' && (
+                <div className="fixed inset-0 bg-banca-escuro/95 dark:bg-gray-900/95 z-[100] flex items-center justify-center p-2 sm:p-4 backdrop-blur-md transition-colors duration-300">
+                    <div className="bg-[#e1f0ff] dark:bg-gray-800 p-4 sm:p-8 rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[95vh] overflow-y-auto relative text-banca-escuro dark:text-gray-100 shadow-2xl transition-colors duration-300">
+
+                        <button
+                            onClick={handleCloseModal}
+                            className="absolute top-2 right-4 sm:top-4 sm:right-6 text-3xl sm:text-4xl text-blue-900 dark:text-blue-300 hover:text-blue-700 dark:hover:text-blue-100 transition-colors"
+                        >
+                            &times;
+                        </button>
+
+                        <div className="grid md:grid-cols-2 gap-6 sm:gap-8 mt-6 sm:mt-0">
+                            <div className="flex flex-col items-center w-full">
+                                <h2 className="text-xl sm:text-2xl font-black mb-4 uppercase text-center w-full">
+                                    Simulador de Pressão
+                                </h2>
+                                <iframe
+                                    src="https://scratch.mit.edu/projects/1239452553/embed"
+                                    className="rounded-xl shadow-lg w-full aspect-[4/3] max-w-[485px] bg-white dark:bg-gray-700"
+                                    allowFullScreen
+                                />
+                            </div>
+
+                            <div className="space-y-4">
+                                <h3 className="font-bold border-b border-blue-300 dark:border-gray-600 pb-2">
+                                    Desafio de Física
+                                </h3>
+                                <p className="text-sm">
+                                    Sabendo que a cada 10m de profundidade a pressão aumenta 1 atm, responda:
+                                </p>
+
+                                <div className="bg-white dark:bg-gray-700 p-4 rounded-xl shadow-inner dark:shadow-md transition-colors duration-300">
+                                    <p className="text-sm font-semibold">
+                                        Qual a pressão total a 10m de profundidade?
+                                    </p>
+                                    <input
+                                        type="number"
+                                        id="ex-pressao"
+                                        className="w-full mt-2 p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
+                                        placeholder="Resposta em atm..."
+                                    />
+                                    <button
+                                        onClick={() => {
+                                            const val = (document.getElementById('ex-pressao') as HTMLInputElement).value;
+                                            alert(val === "2" ? "Correto! 1 atm (ar) + 1 atm (água)" : "Tente novamente!");
+                                        }}
+                                        className="mt-3 bg-blue-600 dark:bg-blue-500 text-white px-4 py-1.5 rounded text-sm hover:bg-blue-700 dark:hover:bg-blue-600 w-full sm:w-auto transition-colors"
+                                    >
+                                        Verificar
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
