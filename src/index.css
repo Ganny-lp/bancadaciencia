@@ -15,28 +15,7 @@
         left: 10px;
     }
 }
-@layer base {
-    body {
-        background-image: url('./images/banca.png');
-        background-size: cover;
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-    }
-
-    /* Camada de azul por cima da imagem para dar profundidade */
-    body::before {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(12, 61, 122, 0.7); /* banca-escuro transparente */
-        z-index: -1;
-    }
-}@tailwind base;
-@tailwind components;
+@tailwind base;
 @tailwind utilities;
 
 @layer base {
@@ -46,7 +25,7 @@
         min-height: 100vh;
         background-color: #006cd6   ; /* Cor reserva */
         background-image: url("./images/banca.png"); /* Certifique-se que o ficheiro está em public/images/banca.png */
-        background-size: cover;
+        background-size: 107vw;
         background-position: center;
         background-repeat: no-repeat;
         background-attachment: fixed;
