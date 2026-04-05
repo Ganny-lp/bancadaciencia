@@ -387,16 +387,24 @@ export const Home = () => {
                                 <button
                                     key={kit.id}
                                     onClick={() => openModal('DRIVE_VIEWER', kit.id)}
-                                    className="flex flex-col items-center group"
+                                    className="flex flex-col items-center group outline-none"
                                 >
-                                    <div className="w-full aspect-square rounded-xl overflow-hidden shadow-md bg-gray-100 dark:bg-gray-700 group-hover:border-banca-claro dark:group-hover:border-blue-400 border-4 border-transparent transition-all duration-300">
+                                    {/* Container da Imagem */}
+                                    <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-gray-100 dark:bg-slate-800 shadow-md hover:shadow-xl dark:shadow-none dark:hover:shadow-[0_0_20px_rgba(96,165,250,0.2)] border-2 border-gray-200 dark:border-slate-700 group-hover:border-blue-500 dark:group-hover:border-blue-400 transition-all duration-300">
+
+                                        {/* Imagem com efeito de zoom no hover */}
                                         <img
                                             src={kit.coverImagePath}
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
                                             alt={kit.name}
                                         />
+
+                                        {/* Overlay escuro sutil que aparece no hover */}
+                                        <div className="absolute inset-0 bg-black/10 dark:bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                                     </div>
-                                    <p className="mt-2 font-bold text-sm sm:text-base text-gray-900 dark:text-gray-100 text-center transition-colors">
+
+                                    {/* Texto do Produto */}
+                                    <p className="mt-3 font-semibold text-sm sm:text-base text-gray-700 dark:text-gray-300 text-center transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400">
                                         {kit.name}
                                     </p>
                                 </button>
