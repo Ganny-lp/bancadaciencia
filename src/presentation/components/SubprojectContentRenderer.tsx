@@ -1,5 +1,5 @@
 import React from "react";
-import { SubprojectContent } from "./subprojectsContent";
+import { SubprojectContent } from "../config/subprojectsContent";
 
 interface SubprojectContentProps {
   content: SubprojectContent | undefined;

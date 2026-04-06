@@ -1,7 +1,10 @@
 import React from "react";
 import { useCarousel } from "../hooks/useCarousel";
 import { entidadesData } from "../config/homeConfig";
-import { getSubprojectContent, getImageUrl } from "../config/subprojectsContent";
+import {
+  getSubprojectContent,
+  getImageUrl,
+} from "../config/subprojectsContent";
 import { SubprojectContentRenderer } from "./SubprojectContentRenderer";
 
 interface EntitiesSectionProps {
@@ -41,8 +44,9 @@ export const EntitiesSection: React.FC<EntitiesSectionProps> = ({
           >
             <img
               src={
-                getImageUrl(getSubprojectContent(mainEntity.id)?.profileImage) ||
-                mainEntity.src
+                getImageUrl(
+                  getSubprojectContent(mainEntity.id)?.profileImage,
+                ) || mainEntity.src
               }
               alt={mainEntity.name}
               className="w-full h-full object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-500"
@@ -78,8 +82,9 @@ export const EntitiesSection: React.FC<EntitiesSectionProps> = ({
                 <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full border-2 border-white/20 bg-banca-escuro/30 p-2 overflow-hidden">
                   <img
                     src={
-                      getImageUrl(getSubprojectContent(entity.id)?.profileImage) ||
-                      entity.src
+                      getImageUrl(
+                        getSubprojectContent(entity.id)?.profileImage,
+                      ) || entity.src
                     }
                     alt={entity.name}
                     className="w-full h-full object-contain"

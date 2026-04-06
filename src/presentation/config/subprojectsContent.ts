@@ -1,7 +1,9 @@
 import React from "react";
 
 // Helper para contornar CORS do Google Drive usando proxy de imagens
-export const getImageUrl = (googleDriveUrl: string | undefined): string | undefined => {
+export const getImageUrl = (
+  googleDriveUrl: string | undefined,
+): string | undefined => {
   if (!googleDriveUrl) return undefined;
   // Usa images.weserv.nl como proxy para contornar CORS
   return `https://images.weserv.nl/?url=${encodeURIComponent(googleDriveUrl)}&w=400`;
