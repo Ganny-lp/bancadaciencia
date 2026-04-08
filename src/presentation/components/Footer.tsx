@@ -1,104 +1,18 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useModal } from '../contexts/ModalContext';
+import React from 'react';
 
 export const Footer = () => {
-    const { openModal } = useModal();
-
-    const [showDialog, setShowDialog] = useState(false);
-    const [dialogIndex, setDialogIndex] = useState(0);
-    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const modalTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-    // Ciclo de troca de imagens do balão (a cada 6s)
-    useEffect(() => {
-        let interval: ReturnType<typeof setTimeout> | null = null;
-        if (showDialog) {
-            interval = setInterval(() => {
-                setDialogIndex((prev) => (prev + 1) % 3);
-            }, 6000);
-        }
-        return () => {
-            if (interval) clearInterval(interval);
-        };
-    }, [showDialog]);
-
-    // Limpa timeouts ao desmontar
-    useEffect(() => {
-        return () => {
-            if (timeoutRef.current) clearTimeout(timeoutRef.current);
-            if (modalTimeoutRef.current) clearTimeout(modalTimeoutRef.current);
-        };
-    }, []);
-
-    const showTemporaryDialog = () => {
-        setShowDialog(true);
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        timeoutRef.current = setTimeout(() => {
-            setShowDialog(false);
-        }, 5000);
-    };
-
-    const handleClick = () => {
-        if ('ontouchstart' in window) {
-            showTemporaryDialog();
-            if (modalTimeoutRef.current) clearTimeout(modalTimeoutRef.current);
-            modalTimeoutRef.current = setTimeout(() => {
-                openModal('SUBPROJETOS');
-            }, 500);
-        } else {
-            openModal('SUBPROJETOS');
-        }
-    };
-
-    const handleMouseEnter = () => {
-        if (!('ontouchstart' in window)) {
-            setShowDialog(true);
-        }
-    };
-
-    const handleMouseLeave = () => {
-        if (!('ontouchstart' in window)) {
-            setShowDialog(false);
-            if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        }
-    };
-
     return (
         <footer className="w-full bg-gradient-to-br from-[#001428b3] to-[#002850b3] border-t border-[#70a8ff66] mt-24 relative z-10 overflow-x-clip">
-            {/* Mascote (boi) - absolute posicionado */}
+            {/* Mascote (boi) - absolute posicionado e puramente decorativo */}
             <div className="absolute bottom-0 left-0 z-30 pointer-events-none">
                 <div className="relative">
-                    <button
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                        onClick={handleClick}
-                        className="w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] md:w-[280px] md:h-[280px] lg:w-[340px] lg:h-[340px] pointer-events-auto hover:scale-105 transition-transform duration-300 cursor-pointer drop-shadow-[0_-5px_15px_rgba(0,0,0,0.3)] block"
-                    >
+                    <div className="w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] md:w-[280px] md:h-[280px] lg:w-[340px] lg:h-[340px] drop-shadow-[0_-5px_15px_rgba(0,0,0,0.3)] block">
                         <img
                             src="./images/subprojetos.png"
                             alt="Mascote"
                             className="w-full h-full object-contain object-bottom"
                         />
-                    </button>
-
-                    {/* Balão de diálogo - ajustado para ficar mais próximo */}
-                    {showDialog && (
-                        <div
-                            className="fixed pointer-events-none transition-opacity duration-300 z-50"
-                            style={{
-                                bottom: '20%',      // distância do fundo – ajuste conforme necessário
-                                left: '25%',        // posição horizontal (25% da largura da tela)
-                                transform: 'translateX(-50%)',
-                                width: 'clamp(180px, 40vw, 280px)',
-                            }}
-                        >
-                            <img
-                                src={`./images/dialogo${dialogIndex + 1}.png`}
-                                className="w-full h-auto object-contain drop-shadow-2xl"
-                                alt="Diálogo"
-                            />
-                        </div>
-                    )}
+                    </div>
                 </div>
             </div>
 
