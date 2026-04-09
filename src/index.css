@@ -1,12 +1,15 @@
 @import "tailwindcss";
-{
+
+@keyframes subtlePop {
     0% { transform: scale(1); opacity: 1; }
     50% { transform: scale(1.05); opacity: 0.9; }
     100% { transform: scale(1); opacity: 1; }
 }
+
 .animate-subtle {
     animation: subtlePop 0.2s ease-in-out;
 }
+
 @media (max-width: 768px) {
     #btnEachOfficial {
         width: 70px;
@@ -15,7 +18,7 @@
         left: 10px;
     }
 }
-@tailwind base;
+
 @tailwind utilities;
 
 @layer base {
@@ -23,24 +26,33 @@
         margin: 0;
         padding: 0;
         min-height: 100vh;
-        background-color: #006cd6   ; /* Cor reserva */
-        background-image: url("./images/banca.png"); /* Certifique-se que o ficheiro está em public/images/banca.png */
-        background-size: 107vw;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
+        background-color: #006cd6;
         color: white;
+        /* Removemos o background-image e o fixed daqui */
     }
 
-    /* Camada de azul por cima da imagem para dar profundidade */
+    /* 1ª Camada: Imagem de Fundo (Resolve a instabilidade e o corte) */
     body::before {
         content: "";
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        inset: 0; /* Faz grudar no topo, base e laterais */
+        width: 100vw;
+        height: 100vh;
+        background-image: url("./images/banca.png");
+        background-size: cover; /* Garante que nunca fique cortado */
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: -2; /* Fica no fundo de tudo */
+    }
+
+    /* 2ª Camada: Overlay Azul por cima da imagem */
+    body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
         background: rgba(0, 108, 214, 0.7);
-        z-index: -1;
+        z-index: -1; /* Fica entre a imagem e o conteúdo do site */
     }
 }
