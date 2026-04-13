@@ -1,18 +1,16 @@
 import React from 'react';
 
-export const Footer = () => {
+export const Footer: React.FC = () => {
     return (
-        <footer className="w-full bg-gradient-to-br from-[#001428b3] to-[#002850b3] border-t border-[#70a8ff66] mt-24 relative z-10 overflow-x-clip">
-            {/* Mascote (boi) - absolute posicionado e puramente decorativo */}
+        <footer className="w-full bg-gradient-to-br from-[#001428b3] to-[#002850b3] border-t border-[#70a8ff66] mt-24 relative z-10 overflow-visible">
+            {/* Mascote (boi) - decorativo */}
             <div className="absolute bottom-0 left-0 z-30 pointer-events-none">
-                <div className="relative">
-                    <div className="w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] md:w-[280px] md:h-[280px] lg:w-[340px] lg:h-[340px] drop-shadow-[0_-5px_15px_rgba(0,0,0,0.3)] block">
-                        <img
-                            src="./images/subprojetos.png"
-                            alt="Mascote"
-                            className="w-full h-full object-contain object-bottom"
-                        />
-                    </div>
+                <div className="w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] md:w-[280px] md:h-[280px] lg:w-[340px] lg:h-[340px] drop-shadow-[0_-5px_15px_rgba(0,0,0,0.3)]">
+                    <img
+                        src="./images/subprojetos.png"
+                        alt="Mascote da Banca da Ciência"
+                        className="w-full h-full object-contain object-bottom"
+                    />
                 </div>
             </div>
 

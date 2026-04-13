@@ -116,7 +116,7 @@ export const EntitiesSection: React.FC<EntitiesSectionProps> = ({
         </div>
         <button
           onClick={() => onEntityClick(mainEntity.id)}
-          className="mt-5 sm:mt-6 w-full sm:w-auto bg-blue-950 text-banca-escuro font-black text-xs sm:text-sm uppercase px-6 sm:px-8 py-3 rounded-full hover:bg-blue-100 hover:scale-105 transition-all shadow-lg flex items-center justify-center gap-2"
+          className="mt-5 sm:mt-6 w-full sm:w-auto bg-blue-950 text-white font-black text-xs sm:text-sm uppercase px-6 sm:px-8 py-3 rounded-full hover:bg-white hover:text-blue-950 hover:scale-105 transition-all shadow-lg flex items-center justify-center gap-2"
         >
           Detalhes e Fotos
         </button>

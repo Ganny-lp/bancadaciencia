@@ -1,0 +1,38 @@
+{
+  "name": "Banca da Ciência - EACH-USP",
+  "short_name": "Banca Ciência",
+  "description": "Projeto de extensão universitária focado em divulgação científica através de oficinas interativas para comunidades periféricas da Zona Leste de São Paulo",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#006cd6",
+  "theme_color": "#006cd6",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "categories": ["education", "science"],
+  "icons": [
+    {
+      "src": "/images/each.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/each.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/banca.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
