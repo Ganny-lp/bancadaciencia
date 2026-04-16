@@ -16,24 +16,6 @@ export const ContactsSection: React.FC = () => {
 
     return (
         <>
-            {/* 1. SEÇÃO DA PÁGINA (NOSSA MISSÃO) */}
-            <div className="flex flex-col items-center justify-center w-full max-w-5xl animate-fade-in px-4 my-12">
-                {/* Alterado para um azul profundo com transparência (Indigo-950/40) */}
-                <div className="bg-indigo-950/40 p-8 sm:p-12 rounded-3xl backdrop-blur-md border border-blue-400/20 shadow-2xl shadow-blue-900/20 w-full">
-                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-6 flex items-center gap-3">
-                        <span className="text-blue-400">|</span> Nossa Missão
-                    </h3>
-                    <div className="space-y-4">
-                        <p className="text-blue-50 text-base sm:text-lg leading-relaxed">
-                            Somos um projeto de extensão universitária vinculado à iniciativa <strong>Banca da Ciência</strong>. Nosso foco é realizar oficinas interativas de divulgação científica com crianças e adolescentes, especialmente de comunidades periféricas da Zona Leste de São Paulo.
-                        </p>
-                        <p className="text-blue-50/90 text-base sm:text-lg leading-relaxed">
-                            Nossas atividades ocorrem em escolas públicas e centros comunitários, como o CCA Jardim Keralux, e são conduzidas por estudantes da graduação da <strong>EACH-USP</strong>. Nosso objetivo é articular ciência, cultura, tecnologia e cidadania por meio de experiências práticas, criativas e acessíveis, promovendo a equidade e a formação crítica.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
             {/* 2. BOTÃO FLUTUANTE E MODAL DE CONTATO */}
             <div className="fixed bottom-24 right-4 sm:right-6 z-50">
 
