@@ -105,7 +105,7 @@ export const Home = () => {
                                 </div>
                                 <blockquote className="relative text-center">
                                     <p className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-medium leading-relaxed tracking-wide text-white/90 italic max-w-4xl mx-auto">
-                    <span className="bg-gradient-to-r from-purple-700 to-white bg-clip-text text-transparent font-bold not-italic">
+                    <span className="bg-gradient-to-r from-white to-white bg-clip-text text-transparent font-bold not-italic">
                       "Da Zona Leste de São Paulo
                     </span>
                                         <br className="hidden sm:block" /> para o mundo:
