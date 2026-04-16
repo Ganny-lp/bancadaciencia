@@ -2,18 +2,8 @@ import React, { useEffect } from "react";
 
 export const VLibrasWidget = () => {
   useEffect(() => {
-    // Verifica se o script já foi adicionado para não duplicar
-    const existingScript = document.getElementById("vlibras-script");
-    if (existingScript) return;
-
-    // Cria o script do VLibras dinamicamente
-    const script = document.createElement("script");
-    script.src = "https://vlibras.gov.br/app/vlibras-plugin.js";
-    script.id = "vlibras-script";
-    script.async = true;
-
-    // Assim que baixar o script, ele inicia o bonequinho
-    script.onload = () => {
+    // Separei a inicialização em uma função para podermos chamar em dois cenários
+    const initVLibras = () => {
       // @ts-expect-error: O window.VLibras é injetado pelo script externo
       if (window.VLibras) {
         // @ts-expect-error: O window.VLibras é injetado pelo script externo
@@ -21,18 +11,32 @@ export const VLibrasWidget = () => {
       }
     };
 
+    const existingScript = document.getElementById("vlibras-script");
+
+    if (existingScript) {
+      // Se o script já existe (ex: você mudou de página e voltou, ou o Strict Mode rodou),
+      // apenas reinicializa o widget para as novas divs recém-renderizadas.
+      initVLibras();
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://vlibras.gov.br/app/vlibras-plugin.js";
+    script.id = "vlibras-script";
+    script.async = true;
+
+    // Assim que baixar o script na primeira vez, inicia
+    script.onload = initVLibras;
+
     document.body.appendChild(script);
   }, []);
 
   return (
-    /* O truque {...{ atributo: "valor" }} engana o TypeScript de forma segura,
-          permitindo que passemos os atributos customizados do VLibras sem erros.
-        */
-    <div {...{ vw: "true" }} className="enabled" style={{ zIndex: 9999 }}>
-      <div {...{ "vw-access-button": "true" }} className="active"></div>
-      <div {...{ "vw-plugin-wrapper": "true" }}>
-        <div className="vw-plugin-top-wrapper"></div>
+      <div {...{ vw: "true" }} className="enabled" style={{ zIndex: 9999 }}>
+        <div {...{ "vw-access-button": "true" }} className="active"></div>
+        <div {...{ "vw-plugin-wrapper": "true" }}>
+          <div className="vw-plugin-top-wrapper"></div>
+        </div>
       </div>
-    </div>
   );
 };

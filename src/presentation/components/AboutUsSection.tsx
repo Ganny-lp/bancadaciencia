@@ -41,33 +41,6 @@ export const AboutUsSection: React.FC<AboutUsProps> = ({ onEntityClick }) => {
                         promovendo a equidade e a formação crítica.
                     </p>
 
-                    <div className="mt-10 bg-white/5 p-6 sm:p-8 rounded-2xl border border-white/10 text-left">
-                        <h3 className="text-xl font-bold text-white mb-4 text-center sm:text-left">
-                            Nossos Núcleos Temáticos
-                        </h3>
-                        <p className="mb-6 text-white/80">
-                            As oficinas são organizadas em núcleos interdisciplinares. Clique em cada um deles para saber mais:
-                        </p>
-
-                        {/* 👇 Aqui transformamos a lista em botões clicáveis */}
-                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm sm:text-base">
-                            {nucleos.map((nucleo) => (
-                                <li key={nucleo.id}>
-                                    <button
-                                        onClick={() => onEntityClick(nucleo.id)}
-                                        className="flex items-center gap-2 text-left w-full p-2 rounded-lg hover:bg-white/10 transition-all group"
-                                    >
-                    <span className="text-xl group-hover:scale-125 transition-transform duration-300">
-                      {nucleo.icon}
-                    </span>
-                                        <span className="text-white group-hover:text-blue-300 transition-colors">
-                      <strong>{nucleo.name}:</strong> {nucleo.desc}
-                    </span>
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
 
                 </div>
 
