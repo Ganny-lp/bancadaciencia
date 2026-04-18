@@ -10,16 +10,22 @@ import { ModalProvider } from "./presentation/contexts/ModalContext";
 // Importa componentes de infraestrutura
 import { ErrorBoundary } from "./presentation/components/ErrorBoundary";
 
+// Importa o V-Libras (verifique se o caminho do import está correto para a sua estrutura!)
+import { VLibrasWidget } from "./presentation/components/VLibrasWidget";
+
 // Importa a sua página principal
 import { Home } from "./presentation/pages/Home";
 
 // Esta é a função que "injeta" o React na div id="root" do index.html
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <ErrorBoundary>
-      <ModalProvider>
-        <Home />
-      </ModalProvider>
-    </ErrorBoundary>
-  </React.StrictMode>,
+    <React.StrictMode>
+        <ErrorBoundary>
+            {/* V-Libras na raiz, livre de qualquer CSS restritivo da Home! */}
+            <VLibrasWidget />
+
+            <ModalProvider>
+                <Home />
+            </ModalProvider>
+        </ErrorBoundary>
+    </React.StrictMode>,
 );
