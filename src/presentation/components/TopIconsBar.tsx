@@ -1,4 +1,5 @@
 import React from 'react';
+import { getFileUrl } from '../config/subprojectsContent';
 
 interface TopIcon {
     id: string;
@@ -6,16 +7,16 @@ interface TopIcon {
 }
 
 const icons: TopIcon[] = [
-    { id: 'KITS', src: './images/pasta.png' },
-    { id: 'NEWTON', src: './images/aexestrela.png' },
-    { id: 'FOLDER', src: './images/planos.png' },
-    { id: 'TEACHER', src: './images/fazenda.png' },
-    { id: 'CHICKEN', src: './images/alimentos.png' },
-    { id: 'EYE', src: './images/olho.png' },
-    { id: 'TELESCOPE', src: './images/telescopio.png' },
-    { id: 'BULB', src: './images/foton.png' },
-    { id: 'SNORKEL', src: './images/pressao.png' },
-    { id: 'YODA', src: './images/yoda.png' },
+    { id: 'KITS', src: getFileUrl('banca/pasta.png') },
+    { id: 'NEWTON', src: getFileUrl('banca/aexestrela.png') },
+    { id: 'FOLDER', src: getFileUrl('banca/planos.png') },
+    { id: 'TEACHER', src: getFileUrl('banca/fazenda.png') },
+    { id: 'CHICKEN', src: getFileUrl('banca/alimentos.png') },
+    { id: 'EYE', src: getFileUrl('banca/olho.png') },
+    { id: 'TELESCOPE', src: getFileUrl('banca/telescopio.png') },
+    { id: 'BULB', src: getFileUrl('banca/foton.png') },
+    { id: 'SNORKEL', src: getFileUrl('banca/pressao.png') },
+    { id: 'YODA', src: getFileUrl('banca/yoda.png') },
 ];
 
 interface TopIconsBarProps {

@@ -1,4 +1,5 @@
 import React from "react";
+import { getFileUrl } from "../config/subprojectsContent";
 
 interface HeaderProps {
   activeTab: "ENTIDADES" | "DINAMICAS";
@@ -44,7 +45,7 @@ export const HomeHeader: React.FC<HeaderProps> = ({
             onClick={handleEachLogoClick}
             onKeyDown={(e) => handleKeyDown(e, handleEachLogoClick)}
             className="w-[80px] h-[80px] rounded-full border-none bg-transparent bg-no-repeat bg-center bg-contain cursor-pointer shadow-lg hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            style={{ backgroundImage: "url('./images/each.png')" }}
+            style={{ backgroundImage: `url('${getFileUrl("banca/each.png")}')` }}
             aria-label="Visitar site da EACH-USP"
             title="EACH-USP - Escola de Artes, Ciências e Humanidades"
             tabIndex={0}
@@ -116,7 +117,7 @@ export const HomeHeader: React.FC<HeaderProps> = ({
             onClick={handleEachLogoClick}
             onKeyDown={(e) => handleKeyDown(e, handleEachLogoClick)}
             className="w-12 h-12 rounded-full border-none bg-transparent bg-no-repeat bg-center bg-contain flex-shrink-0 cursor-pointer shadow-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            style={{ backgroundImage: "url('./images/each.png')" }}
+            style={{ backgroundImage: `url('${getFileUrl("banca/each.png")}')` }}
             aria-label="Visitar EACH-USP"
             title="EACH-USP"
             tabIndex={0}

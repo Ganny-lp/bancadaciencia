@@ -1,4 +1,13 @@
 import React from "react";
+import { supabase } from '../../lib/SupabaseClient';
+
+// Helper para ajudar a pegar as imagens da pasta do Supabase Storage, usando o caminho relativo
+export const getFileUrl = (path: string) : string => {
+  if (!path) return '';
+  const { data } = supabase.storage.from('documents-driver').getPublicUrl(path);
+
+  return data.publicUrl;
+};
 
 // Helper para contornar CORS do Google Drive usando proxy de imagens
 export const getImageUrl = (

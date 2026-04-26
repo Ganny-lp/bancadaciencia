@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { getFileUrl } from '../config/subprojectsContent';
 
 const randInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -104,7 +105,7 @@ export const JediArchiveSimulator = () => {
                             <div className="flex flex-col gap-4">
                                 <div className="h-0 grow">
                                     <video controls preload="metadata" className="w-full h-full max-h-[28rem] rounded object-cover">
-                                        <source src="./images/caixadagua.mp4" type="video/mp4" />
+                                        <source src={getFileUrl('banca/caixadagua.mp4')} type="video/mp4" />
                                         Seu navegador não suporta vídeo.
                                     </video>
                                 </div>
@@ -139,13 +140,13 @@ export const JediArchiveSimulator = () => {
                                 </div>
                             </div>
                             <div className="flex items-center justify-center">
-                                <img src="./images/questao.png" alt="Questão" className="w-full max-h-[32rem] rounded border border-gray-300" />
+                                <img src={getFileUrl('banca/questao.png')} alt="Questão" className="w-full max-h-[32rem] rounded border border-gray-300" />
                             </div>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="flex justify-center items-start">
-                                <img src="./images/biblioteca.png" alt="Biblioteca" className="w-full max-h-[32rem] rounded" />
+                                <img src={getFileUrl('banca/biblioteca.png')} alt="Biblioteca" className="w-full max-h-[32rem] rounded" />
                             </div>
                             <div className="flex flex-col justify-center">
                                 <h3 className="text-lg font-bold mb-2">Senha do Fóssil</h3>
@@ -176,7 +177,7 @@ export const JediArchiveSimulator = () => {
                                         <div className="mt-4 flex justify-center">
                                             <a href="https://www.instagram.com/nnediusp/" target="_blank" rel="noopener noreferrer">
                                                 <img
-                                                    src="./images/ultima.png"
+                                                    src={getFileUrl('banca/ultima.png')}
                                                     alt="Última"
                                                     className="w-full max-w-6xl max-h-[80vh] rounded border border-gray-300 object-contain cursor-pointer"
                                                 />
@@ -199,8 +200,8 @@ export const JediArchiveSimulator = () => {
                 <div className="lg:col-span-5 bg-zinc-900/70 border border-green-800 rounded-xl p-4">
                     <h2 className="text-xl text-green-300 font-bold mb-2">Planeta Oculto Detectado</h2>
                     <div className="mb-4 rounded-lg overflow-hidden border border-green-700">
-                        <video controls preload="metadata" className="w-full max-h-52 bg-black" poster="./images/yoda-poster.jpg">
-                            <source src="./images/yoda.mp4" type="video/mp4" />
+                        <video controls preload="metadata" className="w-full max-h-52 bg-black" poster={getFileUrl("banca/yoda-poster.jpg")}>
+                            <source src={getFileUrl("banca/yoda.mp4")} type="video/mp4" />
                             Seu navegador não suporta vídeo HTML5.
                         </video>
                     </div>

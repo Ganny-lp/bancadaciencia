@@ -3,7 +3,8 @@ import { useCarousel } from "../hooks/useCarousel";
 import { entidadesData } from "../config/homeConfig";
 import {
   getSubprojectContent,
-  getImageUrl,
+  getFileUrl,
+  getImageUrl
 } from "../config/subprojectsContent";
 import { SubprojectContentRenderer } from "./SubprojectContentRenderer";
 

@@ -1,3 +1,5 @@
+import { getFileUrl } from "./subprojectsContent";
+
 export interface Dinamica {
   id: string;
   src: string;
@@ -11,23 +13,23 @@ export interface Entidade {
 }
 
 export const dinamicasData: Dinamica[] = [
-  { id: "NEWTON", src: "./images/aexestrela.png", label: "Aexestrela" },
-  { id: "TEACHER", src: "./images/fazenda.png", label: "Fazenda" },
-  { id: "CHICKEN", src: "./images/alimentos.png", label: "Alimentos" },
-  { id: "EYE", src: "./images/olho.png", label: "Onda" },
-  { id: "TELESCOPE", src: "./images/telescopio.png", label: "Telescópio" },
-  { id: "BULB", src: "./images/foton.png", label: "Fóton" },
-  { id: "SNORKEL", src: "./images/pressao.png", label: "Pressão" },
-  { id: "YODA", src: "./images/yoda.png", label: "Yoda" },
+  { id: "NEWTON", src: getFileUrl("banca/aexestrela.png"), label: "Aexestrela" },
+  { id: "TEACHER", src: getFileUrl("banca/fazenda.png"), label: "Fazenda" },
+  { id: "CHICKEN", src: getFileUrl("banca/alimentos.png"), label: "Alimentos" },
+  { id: "EYE", src: getFileUrl("banca/olho.png"), label: "Onda" },
+  { id: "TELESCOPE", src: getFileUrl("banca/telescopio.png"), label: "Telescópio" },
+  { id: "BULB", src: getFileUrl("banca/foton.png"), label: "Fóton" },
+  { id: "SNORKEL", src: getFileUrl("banca/pressao.png"), label: "Pressão" },
+  { id: "YODA", src: getFileUrl("banca/yoda.png"), label: "Yoda" },
 ];
 
 export const entidadesData: Entidade[] = [
-  { id: "OUMOU", name: "Oumou", src: "./images/oumou.png" },
-  { id: "AGNES", name: "Agnes", src: "./images/agnes.png" },
-  { id: "JUDITH", name: "Judith", src: "./images/judith.png" },
-  { id: "LEAH", name: "Leah", src: "./images/leah.png" },
-  { id: "TEBELLO", name: "Tebello", src: "./images/tebello.png" },
-  { id: "BREEDLOVE", name: "Breedlove", src: "./images/breedlove.png" },
-  { id: "NNEDI", name: "Nnedi", src: "./images/nnedi.png" },
-  { id: "MAATHAI", name: "Maathai", src: "./images/maathai.png" },
+  { id: "OUMOU", name: "Oumou", src: getFileUrl("imagens/oumou.png") },
+  { id: "AGNES", name: "Agnes", src: getFileUrl("imagens/agnes.png") },
+  { id: "JUDITH", name: "Judith", src: getFileUrl("imagens/judith.png") },
+  { id: "LEAH", name: "Leah", src: getFileUrl("imagens/leah.png") },
+  { id: "TEBELLO", name: "Tebello", src: getFileUrl("imagens/tebello.png") },
+  { id: "BREEDLOVE", name: "Breedlove", src: getFileUrl("imagens/breedlove.png") },
+  { id: "NNEDI", name: "Nnedi", src: getFileUrl("imagens/nnedi.png") },
+  { id: "MAATHAI", name: "Maathai", src: getFileUrl("imagens/maathai.png") },
 ];
