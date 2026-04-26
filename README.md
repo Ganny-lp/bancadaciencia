@@ -102,7 +102,10 @@ npm install
 # 3. Configure variáveis de ambiente (opcional)
 cp .env.example .env
 
-# 4. Inicie o servidor de desenvolvimento
+# 4. Instalação das dependências do Supabase
+npm install @supabase/supabase-js
+
+# 5. Inicie o servidor de desenvolvimento
 npm run dev
 ```
 
